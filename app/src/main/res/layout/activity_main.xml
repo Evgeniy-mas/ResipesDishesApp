@@ -12,30 +12,29 @@
     <LinearLayout
         android:id="@+id/linearLayout2"
         android:layout_width="match_parent"
-        android:layout_height="36dp"
+        android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
-        android:layout_marginBottom="55dp"
+        android:layout_marginBottom="8dp"
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
         <Button
-            android:id="@+id/buttonCategory"
+            android:id="@+id/btnCategory"
             style="@style/StyleNavButton"
             android:layout_marginEnd="4dp"
             android:backgroundTint="@color/colorButton"
-            android:text="@string/categoryText"
-            />
+            android:text="@string/categoryText" />
+
 
         <Button
+            android:id="@+id/btnFavorites"
             style="@style/StyleNavButton"
             android:backgroundTint="@color/colorButton2"
             android:text="@string/favourites"
             app:icon="@drawable/ic_heart"
-            app:iconGravity="end"
-            app:iconPadding="0dp"
-            />
+            app:iconGravity="textEnd" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
 
