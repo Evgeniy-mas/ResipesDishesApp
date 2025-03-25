@@ -5,7 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorStatus"
+    android:background="@color/main_background_color"
     android:orientation="vertical"
     tools:context=".MainActivity">
 
@@ -13,8 +13,8 @@
         android:id="@+id/linearLayout2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="16dp"
-        android:layout_marginBottom="8dp"
+        android:layout_marginHorizontal="@dimen/main_space_16"
+        android:layout_marginBottom="@dimen/main_space_half_8"
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -23,15 +23,21 @@
         <Button
             android:id="@+id/btnCategory"
             style="@style/StyleNavButton"
-            android:layout_marginEnd="4dp"
-            android:backgroundTint="@color/colorButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/space_4"
+            android:layout_weight="1"
+            android:backgroundTint="@color/button_categories_color"
             android:text="@string/categoryText" />
 
 
         <Button
             android:id="@+id/btnFavorites"
             style="@style/StyleNavButton"
-            android:backgroundTint="@color/colorButton2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:backgroundTint="@color/button_favorites_color"
             android:text="@string/favourites"
             app:icon="@drawable/ic_heart"
             app:iconGravity="textEnd" />
