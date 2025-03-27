@@ -9,8 +9,23 @@
     </style>
 
     <style name="StyleNavButton" parent="Widget.Material3.Button">
-        <item name="cornerRadius">8dp</item>
+        <item name="cornerRadius">@dimen/main_space_half_8</item>
         <item name="android:textAppearance">@style/StyleTitle14</item>
-        <item name="android:paddingHorizontal">8dp</item>
+        <item name="android:paddingHorizontal">@dimen/main_space_half_8</item>
     </style>
+
+
+    <style name="StyleTextCategory" parent="TextAppearance.AppCompat">
+        <item name="android:textAllCaps">true</item>
+        <item name="fontFamily">@font/montserrat_alternates_semi_bold</item>
+        <item name="android:textSize">@dimen/text_size_cat</item>
+        <item name="android:textColor">@color/text_category</item>
+    </style>
+
+
+
+
+
+
+
 </resources>
