@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".CategoriesListFragment"
+    android:background="@color/main_background_color"
+    >
+
+    <LinearLayout
+        android:layout_width="@dimen/frame_width_category"
+        android:layout_height="@dimen/frame_height_category"
+        android:layout_marginStart="@dimen/main_space_16"
+        android:layout_marginTop="@dimen/frame_margin_top_cat"
+        android:gravity="center"
+        android:background="@drawable/shape_text_category"
+        >
+
+        <TextView
+            style="@style/StyleTextCategory"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/categoryText"
+
+            />
+
+    </LinearLayout>
+</FrameLayout>
