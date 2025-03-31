@@ -10,8 +10,8 @@ import com.example.resipesdishesapp.databinding.FragmentListCategoriesBinding
 class CategoriesListFragment : Fragment() {
 
     private var _categoriesBinding: FragmentListCategoriesBinding? = null
-    private val categoriesBinding get() = _categoriesBinding!!
-
+    private val categoriesBinding: FragmentListCategoriesBinding
+        get() = _categoriesBinding ?: throw IllegalStateException()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -22,7 +22,8 @@ class CategoriesListFragment : Fragment() {
         return categoriesBinding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _categoriesBinding = null
     }
 }
