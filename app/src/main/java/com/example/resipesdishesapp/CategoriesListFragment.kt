@@ -11,7 +11,7 @@ class CategoriesListFragment : Fragment() {
 
     private var _categoriesBinding: FragmentListCategoriesBinding? = null
     private val categoriesBinding: FragmentListCategoriesBinding
-        get() = _categoriesBinding ?: throw IllegalStateException()
+        get() = _categoriesBinding ?: throw IllegalStateException("FragmentListCategoriesBinding must not be null")
 
     override fun onCreateView(
         inflater: LayoutInflater,
