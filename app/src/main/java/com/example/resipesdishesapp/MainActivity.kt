@@ -21,5 +21,21 @@ class MainActivity : AppCompatActivity() {
             setReorderingAllowed(true)
             addToBackStack(null)
         }
+
+        binding.btnFavorites.setOnClickListener {
+            supportFragmentManager.commit {
+                replace<FavoritesFragment>(R.id.mainContainer)
+                setReorderingAllowed(true)
+                addToBackStack(null)
+            }
+        }
+
+        binding.btnCategory.setOnClickListener {
+            supportFragmentManager.commit {
+                replace<CategoriesListFragment>(R.id.mainContainer)
+                setReorderingAllowed(true)
+                addToBackStack(null)
+            }
+        }
     }
 }
