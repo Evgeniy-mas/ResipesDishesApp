@@ -14,12 +14,21 @@
         <item name="android:paddingHorizontal">@dimen/main_space_half_8</item>
     </style>
 
-
     <style name="StyleTextCategory" parent="TextAppearance.AppCompat">
         <item name="android:textAllCaps">true</item>
         <item name="fontFamily">@font/montserrat_alternates_semi_bold</item>
         <item name="android:textSize">@dimen/text_size_cat</item>
         <item name="android:textColor">@color/text_category</item>
+    </style>
+    <style name="StyleDescriptionCard" parent="TextAppearance.AppCompat">
+        <item name="android:fontFamily">@font/montserrat_variable</item>
+        <item name="android:textSize">@dimen/text_size_description_card</item>
+        <item name="android:textColor">@color/text_description</item>
+
+
+
+
+
     </style>
 
 

@@ -8,4 +8,7 @@
     <dimen name="fragment_margin_top_cat">164dp</dimen>
     <dimen name="fragment_margin_top">32dp</dimen>
     <dimen name="fragment_margin_end">195dp</dimen>
+    <dimen name="image_card_height">130dp</dimen>
+    <dimen name="card_height">220dp</dimen>
+    <dimen name="text_size_description_card">12sp</dimen>
 </resources>
