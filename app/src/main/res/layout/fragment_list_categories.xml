@@ -10,13 +10,13 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="@dimen/image_height_category">
 
         <ImageView
             android:id="@+id/imageView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/bcg_categories"
+            android:background="@drawable/bcg_categories_main"
             android:contentDescription="@string/categoryText"
             android:scaleType="center"
             app:layout_constraintEnd_toEndOf="parent"
@@ -24,37 +24,23 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <LinearLayout
+        <TextView
+            style="@style/StyleTextCategory"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/main_space_16"
-            android:layout_marginTop="@dimen/fragment_margin_top_cat"
-            android:layout_marginEnd="@dimen/fragment_margin_end"
-            android:layout_marginBottom="@dimen/main_space_16"
+            android:layout_marginStart="16dp"
+            android:text="@string/categoryText"
             android:background="@drawable/shape_text_category"
-            android:backgroundTint="@color/main_background_color"
-            android:gravity="center"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_goneMarginStart="@dimen/main_space_16">
-
-            <TextView
-                style="@style/StyleTextCategory"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="10dp"
-                android:text="@string/categoryText" />
-
-        </LinearLayout>
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvCategories"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_marginHorizontal="8dp"
         android:layout_marginTop="@dimen/main_space_16"
         android:orientation="vertical"
