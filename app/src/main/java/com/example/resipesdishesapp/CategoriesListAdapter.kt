@@ -18,6 +18,12 @@ class CategoriesListAdapter(private val dataSet: List<Category>) :
                 tvTitle.text = category.title
                 tvDescription.text = category.description
 
+                ivCategoryImage.contentDescription = root.context.getString(
+                    R.string.category_image_description,
+                    category.title
+                )
+
+
                 val drawable =
                     try {
                         Drawable.createFromStream(
