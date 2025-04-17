@@ -27,9 +27,10 @@
     </style>
 
     <style name="StyleDescriptionCard" parent="TextAppearance.AppCompat">
-        <item name="android:fontFamily">@font/montserrat_variable</item>
+        <item name="android:fontFamily">@font/montserrat_medium</item>
         <item name="android:textSize">@dimen/text_size_description_card</item>
         <item name="android:textColor">@color/text_description</item>
+
     </style>
 
     <style name="StyleCategoryCard" parent="TextAppearance.AppCompat">
@@ -37,9 +38,6 @@
         <item name="textAllCaps">true</item>
         <item name="android:textColor">@color/text_category</item>
         <item name="fontFamily">@font/montserrat_alternates_semi_bold</item>
-
-
     </style>
-
 
 </resources>
