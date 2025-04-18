@@ -12,4 +12,5 @@
     <dimen name="padding_text_cat">10dp</dimen>
     <dimen name="text_size_description_card">12sp</dimen>
     <dimen name="image_height_category">224dp</dimen>
+    <dimen name="recipes_image_end">220dp</dimen>
 </resources>
