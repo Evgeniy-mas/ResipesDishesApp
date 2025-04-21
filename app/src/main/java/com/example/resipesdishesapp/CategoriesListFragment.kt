@@ -5,8 +5,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.fragment.app.commit
-import androidx.fragment.app.replace
 import com.example.resipesdishesapp.databinding.FragmentListCategoriesBinding
 
 class CategoriesListFragment : Fragment() {
@@ -43,20 +43,37 @@ class CategoriesListFragment : Fragment() {
         categoriesAdapter.setOnItemClickListener(object :
             CategoriesListAdapter.OnItemClickListener {
 
-            override fun onItemClick() {
-                openRecipesByCategoryId()
+            override fun onItemClick(categoryId: Int) {
+                openRecipesByCategoryId(categoryId)
             }
         }
         )
     }
 
-    fun openRecipesByCategoryId() {
+    fun openRecipesByCategoryId(categoryId:Int) {
+
+        val categoryName = STUB.getCategories().find { it.id == categoryId }?.title
+        val categoryImage = STUB.getCategories().find {it.id == categoryId}?.imageUrl
+
+        val bundle = bundleOf(
+            ARG_CATEGORY_ID to categoryId,
+            ARG_CATEGORY_NAME to categoryName,
+            ARG_CATEGORY_IMAGE_URL to categoryImage
+        )
+
+        val recipeFragment = RecipesListFragment()
+            recipeFragment.arguments = bundle
 
         parentFragmentManager.commit {
-            replace<RecipesListFragment>(R.id.mainContainer)
+            replace(R.id.mainContainer, recipeFragment)
             addToBackStack(null)
         }
     }
 }
+
+const val ARG_CATEGORY_ID = "ARG_CATEGORY_ID"
+const val ARG_CATEGORY_NAME = "ARG_CATEGORY_NAME"
+const val ARG_CATEGORY_IMAGE_URL = "ARG_CATEGORY_IMAGE_URL"
+
 
 
