@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.fragment.app.commit
+import androidx.fragment.app.replace
 import com.example.resipesdishesapp.databinding.FragmentListCategoriesBinding
 
 class CategoriesListFragment : Fragment() {
@@ -50,30 +51,25 @@ class CategoriesListFragment : Fragment() {
         )
     }
 
-    fun openRecipesByCategoryId(categoryId:Int) {
+    fun openRecipesByCategoryId(categoryId: Int) {
 
-        val categoryName = STUB.getCategories().find { it.id == categoryId }?.title
-        val categoryImage = STUB.getCategories().find {it.id == categoryId}?.imageUrl
+        val category = STUB.getCategories().find { it.id == categoryId }
 
         val bundle = bundleOf(
-            ARG_CATEGORY_ID to categoryId,
-            ARG_CATEGORY_NAME to categoryName,
-            ARG_CATEGORY_IMAGE_URL to categoryImage
+            RecipesListFragment.ARG_CATEGORY_ID to categoryId,
+            RecipesListFragment.ARG_CATEGORY_NAME to category?.title,
+            RecipesListFragment.ARG_CATEGORY_IMAGE_URL to category?.imageUrl
         )
 
-        val recipeFragment = RecipesListFragment()
-            recipeFragment.arguments = bundle
-
         parentFragmentManager.commit {
-            replace(R.id.mainContainer, recipeFragment)
+            setReorderingAllowed(true)
+            replace<RecipesListFragment>(R.id.mainContainer, args = bundle)
             addToBackStack(null)
         }
     }
 }
 
-const val ARG_CATEGORY_ID = "ARG_CATEGORY_ID"
-const val ARG_CATEGORY_NAME = "ARG_CATEGORY_NAME"
-const val ARG_CATEGORY_IMAGE_URL = "ARG_CATEGORY_IMAGE_URL"
+
 
 
 
