@@ -38,5 +38,19 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvRecipes"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:layout_marginHorizontal="@dimen/main_space_half_8"
+        android:layout_marginTop="@dimen/main_space_16"
+        app:spanCount="1"
+        tools:itemCount="8"
+        tools:listitem="@layout/item_recipes"
+        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+        />
+
 
 </LinearLayout>

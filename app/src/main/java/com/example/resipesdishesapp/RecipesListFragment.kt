@@ -7,6 +7,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.commit
+import androidx.fragment.app.replace
 import com.example.resipesdishesapp.databinding.FragmentRecipesListBinding
 
 
@@ -41,6 +43,7 @@ class RecipesListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initBundleData()
+        initRecycler()
 
 
     }
@@ -67,13 +70,35 @@ class RecipesListFragment : Fragment() {
                     null
                 }
             _recipesBinding?.ivCategoryImage?.setImageDrawable(drawable)
-
         }
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _recipesBinding = null
+    }
+
+    private fun initRecycler() {
+        val recipesAdapter = RecipesListAdapter(STUB.getRecipesByCategoryId(categoryId))
+        recipesBinding.rvRecipes.adapter = recipesAdapter
+
+        recipesAdapter.setOnItemClickListener(object :
+            RecipesListAdapter.OnItemClickListener {
+            override fun onItemClick(recipeId: Int) {
+                openRecipeByRecipeId(recipeId)
+            }
+
+        }
+        )
+    }
+
+    fun openRecipeByRecipeId(recipeId: Int) {
+
+        parentFragmentManager.commit {
+            setReorderingAllowed(true)
+            replace<ResipeFragment>(R.id.mainContainer)
+            addToBackStack(null)
+        }
     }
 }
 
