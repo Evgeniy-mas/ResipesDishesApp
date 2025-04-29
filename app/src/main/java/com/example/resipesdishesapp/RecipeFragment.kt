@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import com.example.resipesdishesapp.databinding.FragmentResipeBinding
 
 
-class ResipeFragment : Fragment() {
+class RecipeFragment : Fragment() {
 
     private var _recipeBinding: FragmentResipeBinding? = null
     private val recipeBinding: FragmentResipeBinding

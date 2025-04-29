@@ -31,10 +31,10 @@
             android:layout_marginStart="@dimen/main_space_16"
             android:layout_marginEnd="@dimen/recipes_image_end"
             android:background="@drawable/shape_text_category"
-            android:text="@string/RecipesBurger"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="@string/RecipesBurger" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -42,15 +42,14 @@
         android:id="@+id/rvRecipes"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        android:orientation="vertical"
         android:layout_marginHorizontal="@dimen/main_space_half_8"
         android:layout_marginTop="@dimen/main_space_16"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:spanCount="1"
         tools:itemCount="8"
-        tools:listitem="@layout/item_recipes"
-        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-        />
+        tools:listitem="@layout/item_recipes" />
 
 
 </LinearLayout>

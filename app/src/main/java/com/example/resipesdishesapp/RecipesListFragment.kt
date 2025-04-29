@@ -43,9 +43,8 @@ class RecipesListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initBundleData()
+        initUI()
         initRecycler()
-
-
     }
 
     private fun initBundleData() {
@@ -53,25 +52,28 @@ class RecipesListFragment : Fragment() {
             categoryId = bundle.getInt(ARG_CATEGORY_ID)
             categoryName = bundle.getString(ARG_CATEGORY_NAME)
             categoryImageUrl = bundle.getString(ARG_CATEGORY_IMAGE_URL)
-
-            _recipesBinding?.tvTitle?.text = categoryName
-
-            val drawable =
-                try {
-                    Drawable.createFromStream(
-                        categoryImageUrl?.let { requireContext().assets.open(it) },
-                        null
-                    )
-                } catch (e: Exception) {
-                    val errorMessage = requireContext().getString(
-                        R.string.drawable_error
-                    )
-                    Log.e("!!!", "$errorMessage $categoryImageUrl", e)
-                    null
-                }
-            _recipesBinding?.ivCategoryImage?.setImageDrawable(drawable)
         }
     }
+
+    private fun initUI() {
+        _recipesBinding?.tvTitle?.text = categoryName
+
+        val drawable =
+            try {
+                Drawable.createFromStream(
+                    categoryImageUrl?.let { requireContext().assets.open(it) },
+                    null
+                )
+            } catch (e: Exception) {
+                val errorMessage = requireContext().getString(
+                    R.string.drawable_error
+                )
+                Log.e("!!!", "$errorMessage $categoryImageUrl", e)
+                null
+            }
+        _recipesBinding?.ivCategoryImage?.setImageDrawable(drawable)
+    }
+
 
     override fun onDestroyView() {
         super.onDestroyView()
@@ -79,7 +81,7 @@ class RecipesListFragment : Fragment() {
     }
 
     private fun initRecycler() {
-        val recipesAdapter = RecipesListAdapter(STUB.getRecipesByCategoryId(categoryId))
+        val recipesAdapter = RecipesListAdapter(STUB.getRecipesByCategoryId(categoryId ?: 0))
         recipesBinding.rvRecipes.adapter = recipesAdapter
 
         recipesAdapter.setOnItemClickListener(object :
@@ -96,7 +98,7 @@ class RecipesListFragment : Fragment() {
 
         parentFragmentManager.commit {
             setReorderingAllowed(true)
-            replace<ResipeFragment>(R.id.mainContainer)
+            replace<RecipeFragment>(R.id.mainContainer)
             addToBackStack(null)
         }
     }

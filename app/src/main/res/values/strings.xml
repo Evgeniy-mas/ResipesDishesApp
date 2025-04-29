@@ -8,5 +8,6 @@
     <string name="drawable_error">image not found</string>
     <string name="category_image">Изображение категории %1$s</string>
     <string name="RecipesBurger">бургеры</string>
+    <string name="recipe_image_description">Изображение рецепта %1$s</string>
 
 </resources>

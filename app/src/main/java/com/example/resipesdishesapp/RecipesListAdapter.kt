@@ -5,7 +5,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.resipesdishesapp.CategoriesListAdapter.OnItemClickListener
 import com.example.resipesdishesapp.databinding.ItemRecipesBinding
 
 class RecipesListAdapter(private val dataSet: List<Recipe>) :
@@ -28,6 +27,12 @@ class RecipesListAdapter(private val dataSet: List<Recipe>) :
         fun bind(recipes: Recipe) {
             with(binding) {
                 tvTitle.text = recipes.title
+
+                ivRecipeImage.contentDescription = root.context.getString(
+                    R.string.recipe_image_description,
+                    recipes.title
+
+                )
 
                 val drawable =
                     try {
