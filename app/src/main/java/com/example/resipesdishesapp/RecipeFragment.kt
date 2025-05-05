@@ -1,5 +1,6 @@
 package com.example.resipesdishesapp
 
+import android.os.Build
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -9,6 +10,14 @@ import com.example.resipesdishesapp.databinding.FragmentResipeBinding
 
 
 class RecipeFragment : Fragment() {
+
+
+    companion object {
+        const val ARG_RECIPE = "recipe"
+    }
+
+    private lateinit var recipe: Recipe
+
 
     private var _recipeBinding: FragmentResipeBinding? = null
     private val recipeBinding: FragmentResipeBinding
@@ -23,6 +32,35 @@ class RecipeFragment : Fragment() {
     ): View {
         _recipeBinding = FragmentResipeBinding.inflate(inflater, container, false)
         return recipeBinding.root
+    }
+
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        initBundleData()
+        initUI()
+    }
+
+    private fun initBundleData() {
+
+        arguments?.let { bundle ->
+
+            recipe = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                bundle.getParcelable(ARG_RECIPE, Recipe::class.java) as Recipe
+
+            } else {
+                @Suppress("DEPRECATION")
+                bundle.getParcelable(ARG_RECIPE)
+                    ?: throw IllegalStateException("Recipe not found in arguments")
+            }
+        } ?: throw IllegalStateException("Arguments not provided")
+    }
+
+    private fun initUI() {
+        with(recipeBinding) {
+
+            tvTitle.text = recipe.title
+        }
     }
 }
 

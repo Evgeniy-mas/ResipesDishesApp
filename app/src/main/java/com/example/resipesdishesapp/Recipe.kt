@@ -1,5 +1,9 @@
 package com.example.resipesdishesapp
 
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
+
+@Parcelize
 data class Recipe(
     val id: Int,
     val title: String,
@@ -13,7 +17,7 @@ data class Recipe(
             
             """.trimIndent()),
     val imageUrl: String
-)
+):Parcelable
 
 
 
