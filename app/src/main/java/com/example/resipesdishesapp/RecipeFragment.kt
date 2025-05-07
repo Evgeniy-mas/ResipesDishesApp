@@ -42,18 +42,12 @@ class RecipeFragment : Fragment() {
     }
 
     private fun initBundleData() {
+        recipe = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            arguments?.getParcelable(ARG_RECIPE, Recipe::class.java)
+        } else {
 
-        arguments?.let { bundle ->
-
-            recipe = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                bundle.getParcelable(ARG_RECIPE, Recipe::class.java) as Recipe
-
-            } else {
-                @Suppress("DEPRECATION")
-                bundle.getParcelable(ARG_RECIPE)
-                    ?: throw IllegalStateException("Recipe not found in arguments")
-            }
-        } ?: throw IllegalStateException("Arguments not provided")
+            arguments?.getParcelable(ARG_RECIPE)
+        } ?: throw IllegalStateException("Recipe not found in arguments")
     }
 
     private fun initUI() {
