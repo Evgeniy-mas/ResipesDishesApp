@@ -271,6 +271,10 @@ object STUB {
             burgerRecipes
         } else emptyList()
     }
+
+    fun getRecipeById(recipeId: Int): Recipe {
+        return burgerRecipes.first { it.id == recipeId }
+    }
 }
 
 
