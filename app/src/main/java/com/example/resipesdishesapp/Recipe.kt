@@ -16,7 +16,8 @@ data class Recipe(
             "5. Подавайте бургеры горячими с картофельными чипсами или картофельным пюре."          
             
             """.trimIndent()),
-    val imageUrl: String
+    val imageUrl: String,
+    val imageUrlHeader: String
 ):Parcelable
 
 
