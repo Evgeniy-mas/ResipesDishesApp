@@ -30,9 +30,7 @@ class IngredientsAdapter(private val dataSet: List<Ingredient>) :
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
         val ingredient = dataSet[position]
         viewHolder.bind(ingredient)
-
     }
 
     override fun getItemCount() = dataSet.size
-
     }

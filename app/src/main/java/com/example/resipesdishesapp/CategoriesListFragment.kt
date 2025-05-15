@@ -40,7 +40,6 @@ class CategoriesListFragment : Fragment() {
         val categoriesAdapter = CategoriesListAdapter(STUB.getCategories())
         categoriesBinding.rvCategories.adapter = categoriesAdapter
 
-
         categoriesAdapter.setOnItemClickListener(object :
             CategoriesListAdapter.OnItemClickListener {
 
@@ -52,7 +51,6 @@ class CategoriesListFragment : Fragment() {
     }
 
     fun openRecipesByCategoryId(categoryId: Int) {
-
         val category = STUB.getCategories().find { it.id == categoryId }
 
         val bundle = bundleOf(

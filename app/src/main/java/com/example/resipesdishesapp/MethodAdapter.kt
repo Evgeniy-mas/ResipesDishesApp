@@ -8,14 +8,12 @@ import com.example.resipesdishesapp.databinding.ItemMethodBinding
 class MethodAdapter(private val dataSet: List<String>) :
     RecyclerView.Adapter<MethodAdapter.ViewHolder>() {
 
-
     class ViewHolder(private val binding: ItemMethodBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(method: String, index: Int) {
 
             with(binding) {
-
                 tvMethod.text = method
                 tvIndex.text = "${index + 1}."
             }
@@ -32,9 +30,7 @@ class MethodAdapter(private val dataSet: List<String>) :
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
         val method = dataSet[position]
         viewHolder.bind(method, position)
-
     }
 
     override fun getItemCount() = dataSet.size
-
-}
+    }

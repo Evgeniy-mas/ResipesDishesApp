@@ -32,7 +32,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/main_space_half_8"
-            android:layout_marginVertical="@dimen/main_space_half_8"
+          android:layout_marginTop="@dimen/main_space_half_8"
             android:lineHeight="@dimen/main_space_16"
             tools:text="Категория" />
 

@@ -73,8 +73,6 @@ object STUB {
             ),
             imageUrl = "burger-hamburger.png",
             imageUrlHeader = "burger_hamburger.png"
-
-
         ),
         Recipe(
             id = 1,

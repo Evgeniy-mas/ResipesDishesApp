@@ -25,12 +25,10 @@ class RecipesListFragment : Fragment() {
     private var categoryName: String? = null
     private var categoryImageUrl: String? = null
 
-
     private var _recipesBinding: FragmentRecipesListBinding? = null
     private val recipesBinding: FragmentRecipesListBinding
         get() = _recipesBinding
             ?: throw IllegalStateException("RecipesListFragment must not be null")
-
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -75,7 +73,6 @@ class RecipesListFragment : Fragment() {
         _recipesBinding?.ivCategoryImage?.setImageDrawable(drawable)
     }
 
-
     override fun onDestroyView() {
         super.onDestroyView()
         _recipesBinding = null
@@ -90,8 +87,7 @@ class RecipesListFragment : Fragment() {
             override fun onItemClick(recipeId: Int) {
                 openRecipeByRecipeId(recipeId)
             }
-
-        }
+            }
         )
     }
 
