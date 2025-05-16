@@ -16,6 +16,5 @@
     <dimen name="divider">1dp</dimen>
     <dimen name="textPortion">16sp</dimen>
     <dimen name="padding">12dp</dimen>
-    <dimen name="heightHeader">68dp</dimen>
-    <dimen name="maxWidthTextHeader">242dp</dimen>
+    <dimen name="indentEndTextHeader">102dp</dimen>
 </resources>

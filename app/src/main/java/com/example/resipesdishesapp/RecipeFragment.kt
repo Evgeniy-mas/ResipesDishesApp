@@ -15,10 +15,6 @@ import com.google.android.material.divider.MaterialDividerItemDecoration
 
 class RecipeFragment : Fragment() {
 
-    companion object {
-        const val ARG_RECIPE = "recipe"
-    }
-
     private var recipeImageUrl: String? = null
     private lateinit var recipe: Recipe
 
@@ -46,9 +42,9 @@ class RecipeFragment : Fragment() {
 
     private fun initBundleData() {
         recipe = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            arguments?.getParcelable(ARG_RECIPE, Recipe::class.java)
+            arguments?.getParcelable(KeysConstant.ARG_RECIPE, Recipe::class.java)
         } else {
-            arguments?.getParcelable(ARG_RECIPE)
+            arguments?.getParcelable(KeysConstant.ARG_RECIPE)
         } ?: throw IllegalStateException("Recipe not found in arguments")
     }
 
@@ -100,12 +96,3 @@ class RecipeFragment : Fragment() {
         recipeBinding.rvMethod.addItemDecoration(divider)
     }
 }
-
-
-
-
-
-
-
-
-

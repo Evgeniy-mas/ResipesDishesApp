@@ -54,9 +54,9 @@ class CategoriesListFragment : Fragment() {
         val category = STUB.getCategories().find { it.id == categoryId }
 
         val bundle = bundleOf(
-            RecipesListFragment.ARG_CATEGORY_ID to categoryId,
-            RecipesListFragment.ARG_CATEGORY_NAME to category?.title,
-            RecipesListFragment.ARG_CATEGORY_IMAGE_URL to category?.imageUrl
+            KeysConstant.ARG_CATEGORY_ID to categoryId,
+            KeysConstant.ARG_CATEGORY_NAME to category?.title,
+            KeysConstant.ARG_CATEGORY_IMAGE_URL to category?.imageUrl
         )
 
         parentFragmentManager.commit {
