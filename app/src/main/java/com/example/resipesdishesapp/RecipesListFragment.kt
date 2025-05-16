@@ -15,22 +15,14 @@ import com.example.resipesdishesapp.databinding.FragmentRecipesListBinding
 
 class RecipesListFragment : Fragment() {
 
-    companion object {
-        const val ARG_CATEGORY_ID = "category_id"
-        const val ARG_CATEGORY_NAME = "category_name"
-        const val ARG_CATEGORY_IMAGE_URL = "category_image_url"
-    }
-
     private var categoryId: Int? = null
     private var categoryName: String? = null
     private var categoryImageUrl: String? = null
-
 
     private var _recipesBinding: FragmentRecipesListBinding? = null
     private val recipesBinding: FragmentRecipesListBinding
         get() = _recipesBinding
             ?: throw IllegalStateException("RecipesListFragment must not be null")
-
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -50,9 +42,9 @@ class RecipesListFragment : Fragment() {
 
     private fun initBundleData() {
         arguments?.let { bundle ->
-            categoryId = bundle.getInt(ARG_CATEGORY_ID)
-            categoryName = bundle.getString(ARG_CATEGORY_NAME)
-            categoryImageUrl = bundle.getString(ARG_CATEGORY_IMAGE_URL)
+            categoryId = bundle.getInt(KeysConstant.ARG_CATEGORY_ID)
+            categoryName = bundle.getString(KeysConstant.ARG_CATEGORY_NAME)
+            categoryImageUrl = bundle.getString(KeysConstant.ARG_CATEGORY_IMAGE_URL)
         }
     }
 
@@ -75,7 +67,6 @@ class RecipesListFragment : Fragment() {
         _recipesBinding?.ivCategoryImage?.setImageDrawable(drawable)
     }
 
-
     override fun onDestroyView() {
         super.onDestroyView()
         _recipesBinding = null
@@ -90,7 +81,6 @@ class RecipesListFragment : Fragment() {
             override fun onItemClick(recipeId: Int) {
                 openRecipeByRecipeId(recipeId)
             }
-
         }
         )
     }
@@ -98,7 +88,7 @@ class RecipesListFragment : Fragment() {
     fun openRecipeByRecipeId(recipeId: Int) {
         val recipe = STUB.getRecipeById(recipeId)
         val bundle = bundleOf(
-            RecipeFragment.ARG_RECIPE to recipe
+            KeysConstant.ARG_RECIPE to recipe
         )
 
         parentFragmentManager.commit {
@@ -108,8 +98,3 @@ class RecipesListFragment : Fragment() {
         }
     }
 }
-
-
-
-
-

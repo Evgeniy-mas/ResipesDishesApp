@@ -3,11 +3,13 @@
     <string name="categoryText">категории</string>
     <string name="favourites">избранное</string>
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="cardView_iv_description">categoriesImage_category</string>
     <string name="drawable_error">image not found</string>
     <string name="category_image">Изображение категории %1$s</string>
     <string name="RecipesBurger">бургеры</string>
     <string name="recipe_image_description">Изображение рецепта %1$s</string>
-
+    <string name="ingredients">Ингредиенты</string>
+    <string name="portion">Порции</string>
+    <string name="cooking_method">Способ приготовления</string>
+    <string name="method_index_format">%d.</string>
 </resources>

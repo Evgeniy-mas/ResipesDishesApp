@@ -20,7 +20,6 @@ class RecipesListAdapter(private val dataSet: List<Recipe>) :
         itemClickListener = listener
     }
 
-
     class ViewHolder(private val binding: ItemRecipesBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
@@ -31,7 +30,6 @@ class RecipesListAdapter(private val dataSet: List<Recipe>) :
                 ivRecipeImage.contentDescription = root.context.getString(
                     R.string.recipe_image_description,
                     recipes.title
-
                 )
 
                 val drawable =
@@ -52,12 +50,10 @@ class RecipesListAdapter(private val dataSet: List<Recipe>) :
         }
     }
 
-
     override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): ViewHolder {
         val binding =
             ItemRecipesBinding.inflate(LayoutInflater.from(viewGroup.context), viewGroup, false)
         return ViewHolder(binding)
-
     }
 
     override fun onBindViewHolder(viewholder: ViewHolder, position: Int) {
@@ -66,12 +62,10 @@ class RecipesListAdapter(private val dataSet: List<Recipe>) :
         viewholder.itemView.setOnClickListener {
             itemClickListener?.onItemClick(recipes.id)
         }
-
     }
 
     override fun getItemCount() = dataSet.size
-
-}
+    }
 
 
 

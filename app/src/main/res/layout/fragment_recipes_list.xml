@@ -28,12 +28,9 @@
             style="@style/StyleTextCategory"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/main_space_16"
-            android:layout_marginEnd="@dimen/recipes_image_end"
             android:background="@drawable/shape_text_category"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
             tools:text="@string/RecipesBurger" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -50,6 +47,4 @@
         app:spanCount="1"
         tools:itemCount="8"
         tools:listitem="@layout/item_recipes" />
-
-
 </LinearLayout>

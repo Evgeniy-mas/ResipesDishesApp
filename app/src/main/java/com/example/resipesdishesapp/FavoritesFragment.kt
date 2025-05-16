@@ -9,10 +9,10 @@ import com.example.resipesdishesapp.databinding.FragmentFavoritesBinding
 
 
 class FavoritesFragment : Fragment() {
-
     private var _favoritesBinding: FragmentFavoritesBinding? = null
     private val favoritesBinding: FragmentFavoritesBinding
-        get() = _favoritesBinding ?: throw IllegalStateException("FragmentFavoritesBinding must not be null")
+        get() = _favoritesBinding
+            ?: throw IllegalStateException("FragmentFavoritesBinding must not be null")
 
     override fun onCreateView(
         inflater: LayoutInflater,
