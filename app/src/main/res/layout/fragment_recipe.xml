@@ -34,7 +34,7 @@
                 style="@style/StyleTextCategory"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="@dimen/indentEndTextHeader"
+                android:layout_marginEnd="@dimen/main_space_16"
                 android:background="@drawable/shape_text_category"
                 android:singleLine="false"
                 app:layout_constrainedWidth="true"
