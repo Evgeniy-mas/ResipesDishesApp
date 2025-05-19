@@ -17,4 +17,5 @@
     <dimen name="textPortion">16sp</dimen>
     <dimen name="padding">12dp</dimen>
     <dimen name="indentEndTextHeader">102dp</dimen>
+    <dimen name="seekBar_margin_top">13dp</dimen>
 </resources>
