@@ -19,9 +19,8 @@
         <item name="fontFamily">@font/montserrat_alternates_semi_bold</item>
         <item name="android:textSize">@dimen/text_size_cat</item>
         <item name="android:textColor">@color/text_category</item>
-        <item name="android:layout_marginTop">@dimen/fragment_margin_top_cat</item>
-        <item name="android:layout_marginEnd">@dimen/fragment_margin_end</item>
         <item name="android:layout_marginStart">@dimen/main_space_16</item>
+        <item name="android:layout_marginBottom">@dimen/main_space_16</item>
         <item name="android:padding">@dimen/padding_text_cat</item>
 
     </style>
@@ -39,5 +38,33 @@
         <item name="android:textColor">@color/text_category</item>
         <item name="fontFamily">@font/montserrat_alternates_semi_bold</item>
     </style>
+
+    <style name="StyleTextRecipe" parent="TextAppearance.AppCompat">
+        <item name="android:textAllCaps">true</item>
+        <item name="fontFamily">@font/montserrat_alternates_semi_bold</item>
+        <item name="android:textSize">@dimen/text_size_cat</item>
+        <item name="android:textColor">@color/text_category</item>
+    </style>
+
+    <style name="quantityPortion" parent="TextAppearance.AppCompat">
+        <item name="fontFamily">@font/montserrat_medium</item>
+        <item name="android:textSize">@dimen/textPortion</item>
+        <item name="android:textColor">@color/text_description</item>
+    </style>
+
+    <style name="StyleTextIngredient" parent="TextAppearance.AppCompat">
+        <item name="fontFamily">@font/montserrat_medium</item>
+        <item name="android:textSize">@dimen/text_size_button</item>
+        <item name="android:textColor">@color/text_description</item>
+        <item name="textAllCaps">true</item>
+    </style>
+
+    <style name="UnitOfMeasure" parent="TextAppearance.AppCompat">
+        <item name="fontFamily">@font/montserrat_medium</item>
+        <item name="android:textSize">@dimen/text_size_button</item>
+        <item name="android:textColor">@color/text_description</item>
+        </style>
+
+
 
 </resources>

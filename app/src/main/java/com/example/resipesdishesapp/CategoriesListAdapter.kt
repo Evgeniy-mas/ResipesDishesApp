@@ -34,7 +34,6 @@ class CategoriesListAdapter(private val dataSet: List<Category>) :
                     category.title
                 )
 
-
                 val drawable =
                     try {
                         Drawable.createFromStream(
@@ -69,5 +68,4 @@ class CategoriesListAdapter(private val dataSet: List<Category>) :
     }
 
     override fun getItemCount() = dataSet.size
-
-}
+    }
