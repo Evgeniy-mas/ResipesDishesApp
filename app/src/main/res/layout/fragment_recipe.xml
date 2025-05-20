@@ -82,12 +82,16 @@
 
             <SeekBar
                 android:id="@+id/sbQuantityPortion"
+                style="@style/styleSeekBar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/seekBar_margin_top"
                 android:max="5"
                 android:min="1"
-                android:progress="1" />
+                android:paddingStart="0dp"
+                android:paddingEnd="0dp"
+                android:progress="1"
+                android:thumbOffset="0dp" />
 
         </LinearLayout>
 
