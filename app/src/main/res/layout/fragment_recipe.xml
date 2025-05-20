@@ -71,13 +71,24 @@
                     android:text="@string/portion" />
 
                 <TextView
+                    android:id="@+id/tvQuantityPortion"
                     style="@style/quantityPortion"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="6dp"
-                    tools:text="3" />
+                    android:text="@string/defaultPortionQuantity" />
 
             </LinearLayout>
+
+            <SeekBar
+                android:id="@+id/sbQuantityPortion"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/seekBar_margin_top"
+                android:max="5"
+                android:min="1"
+                android:progress="1" />
+
         </LinearLayout>
 
         <androidx.recyclerview.widget.RecyclerView

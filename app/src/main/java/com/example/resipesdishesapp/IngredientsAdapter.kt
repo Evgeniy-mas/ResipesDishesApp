@@ -7,14 +7,24 @@ import com.example.resipesdishesapp.databinding.ItemIngredientBinding
 
 class IngredientsAdapter(private val dataSet: List<Ingredient>) :
     RecyclerView.Adapter<IngredientsAdapter.ViewHolder>() {
+
+    companion object {
+        var quantityPortion = 1
+    }
+
     class ViewHolder(private val binding: ItemIngredientBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-
         fun bind(ingredient: Ingredient) {
+            val calculatePortion = ingredient.quantity.toDouble() * quantityPortion
+
+            val newQuantity = if (calculatePortion % 1 == 0.0) {
+                calculatePortion.toInt().toString()
+            } else calculatePortion.toString()
+
             with(binding) {
                 tvIngredient.text = ingredient.description
-                tvQuantity.text = ingredient.quantity
+                tvQuantity.text = newQuantity
                 tvUnit.text = ingredient.unitOfMeasure
             }
         }
@@ -26,11 +36,14 @@ class IngredientsAdapter(private val dataSet: List<Ingredient>) :
         return ViewHolder(binding)
     }
 
-
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
         val ingredient = dataSet[position]
         viewHolder.bind(ingredient)
     }
 
     override fun getItemCount() = dataSet.size
+
+    fun updateIngredients(progress: Int) {
+        quantityPortion = progress
     }
+}
