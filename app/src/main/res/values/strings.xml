@@ -13,4 +13,5 @@
     <string name="cooking_method">Способ приготовления</string>
     <string name="method_index_format">%d.</string>
     <string name="defaultPortionQuantity">1</string>
+    <string name="icon_fovourites">"Иконка избранное"</string>
 </resources>
