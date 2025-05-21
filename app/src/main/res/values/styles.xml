@@ -63,8 +63,10 @@
         <item name="fontFamily">@font/montserrat_medium</item>
         <item name="android:textSize">@dimen/text_size_button</item>
         <item name="android:textColor">@color/text_description</item>
-        </style>
+    </style>
 
-
-
+    <style name="styleSeekBar" parent="Widget.AppCompat.SeekBar">
+        <item name="android:thumb">@drawable/shape_seekbar_thumb</item>
+        <item name="android:progressDrawable">@drawable/shape_seekbar_progress</item>
+    </style>
 </resources>
