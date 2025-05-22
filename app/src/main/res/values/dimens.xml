@@ -20,4 +20,5 @@
     <dimen name="seekBar_margin_top">13dp</dimen>
     <dimen name="radius_thumb">2dp</dimen>
     <dimen name="height_thumb">30dp</dimen>
+    <dimen name="icon_size_favourites">40dp</dimen>
 </resources>

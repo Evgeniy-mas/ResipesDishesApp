@@ -72,6 +72,22 @@ class RecipeFragment : Fragment() {
             }
 
         _recipeBinding?.ivRecipeImage?.setImageDrawable(drawable)
+
+        _recipeBinding?.ibAddToFavourites?.setImageResource(
+            R.drawable.ic_heart_favourites_empty
+        )
+
+        var isFavorite = false
+        _recipeBinding?.ibAddToFavourites?.setOnClickListener {
+            isFavorite = !isFavorite
+            val newIcon = if (isFavorite) {
+                R.drawable.ic_heart_favourites_empty
+            } else {
+                R.drawable.ic_heart_favourites
+            }
+
+            _recipeBinding?.ibAddToFavourites?.setImageResource(newIcon)
+        }
     }
 
     private fun initRecyclerIngredients() {
