@@ -1,5 +1,6 @@
 package com.example.resipesdishesapp
 
+import android.content.Context
 import android.graphics.drawable.Drawable
 import android.os.Build
 import android.os.Bundle
@@ -77,17 +78,46 @@ class RecipeFragment : Fragment() {
             R.drawable.ic_heart_favourites_empty
         )
 
-        var isFavorite = false
-        _recipeBinding?.ibAddToFavourites?.setOnClickListener {
-            isFavorite = !isFavorite
-            val newIcon = if (isFavorite) {
-                R.drawable.ic_heart_favourites_empty
-            } else {
-                R.drawable.ic_heart_favourites
-            }
+        val favorites = getFavorites()
+        val isFavorite = favorites.contains(recipe.id.toString())
 
-            _recipeBinding?.ibAddToFavourites?.setImageResource(newIcon)
+        _recipeBinding?.ibAddToFavourites?.setImageResource(
+            if (isFavorite) R.drawable.ic_heart_favourites
+            else R.drawable.ic_heart_favourites_empty
+        )
+
+        _recipeBinding?.ibAddToFavourites?.setOnClickListener {
+            val currentFavorites = getFavorites().toMutableSet()
+            val recipeId = recipe.id.toString()
+
+
+            if (currentFavorites.contains(recipeId)) {
+                currentFavorites.remove(recipeId)
+                _recipeBinding?.ibAddToFavourites?.setImageResource(
+                    R.drawable.ic_heart_favourites_empty
+                )
+            } else {
+                currentFavorites.add(recipeId)
+                _recipeBinding?.ibAddToFavourites?.setImageResource(
+                    R.drawable.ic_heart_favourites
+                )
+            }
+            saveFavorites(currentFavorites)
         }
+    }
+
+    private fun saveFavorites(idRecipe: Set<String>) {
+        val sharedPrefs =
+            requireContext().getSharedPreferences(KeysConstant.PREFS_SHARED, Context.MODE_PRIVATE)
+        sharedPrefs.edit()
+            .putStringSet(KeysConstant.FAVORITES_KEY, idRecipe)
+            .apply()
+    }
+
+    private fun getFavorites(): MutableSet<String> {
+        val sharedPrefs =
+            requireContext().getSharedPreferences(KeysConstant.PREFS_SHARED, Context.MODE_PRIVATE)
+        return sharedPrefs.getStringSet(KeysConstant.FAVORITES_KEY, HashSet()) ?: HashSet()
     }
 
     private fun initRecyclerIngredients() {
