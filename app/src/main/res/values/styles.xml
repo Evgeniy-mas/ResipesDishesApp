@@ -69,4 +69,10 @@
         <item name="android:thumb">@drawable/shape_seekbar_thumb</item>
         <item name="android:progressDrawable">@drawable/shape_seekbar_progress</item>
     </style>
+
+    <style name="StyleTextFavoritesEmpty" parent="TextAppearance.AppCompat">
+        <item name="fontFamily">@font/montserrat_medium</item>
+        <item name="android:textSize">@dimen/textPortion</item>
+        <item name="android:textColor">@color/text_description</item>
+    </style>
 </resources>

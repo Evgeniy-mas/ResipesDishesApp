@@ -21,4 +21,6 @@
     <dimen name="radius_thumb">2dp</dimen>
     <dimen name="height_thumb">30dp</dimen>
     <dimen name="icon_size_favourites">40dp</dimen>
+    <dimen name="width_text_favorites">328dp</dimen>
+    <dimen name="margin_top_text_favorites">202dp</dimen>
 </resources>
