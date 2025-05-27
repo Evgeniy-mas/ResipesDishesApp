@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.resipesdishesapp.databinding.ItemRecipesBinding
 
-class RecipesListAdapter(private val dataSet: List<Recipe>) :
+class RecipesListAdapter(private var dataSet: List<Recipe>) :
     RecyclerView.Adapter<RecipesListAdapter.ViewHolder>() {
 
     interface OnItemClickListener {
@@ -18,6 +18,11 @@ class RecipesListAdapter(private val dataSet: List<Recipe>) :
 
     fun setOnItemClickListener(listener: OnItemClickListener) {
         itemClickListener = listener
+    }
+
+    fun updateRecipes(newRecipes: List<Recipe>) {
+        dataSet = newRecipes
+        notifyDataSetChanged()
     }
 
     class ViewHolder(private val binding: ItemRecipesBinding) :
@@ -65,8 +70,4 @@ class RecipesListAdapter(private val dataSet: List<Recipe>) :
     }
 
     override fun getItemCount() = dataSet.size
-    }
-
-
-
-
+}

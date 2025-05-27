@@ -283,4 +283,8 @@ object STUB {
     fun getRecipeById(recipeId: Int): Recipe {
         return burgerRecipes.first { it.id == recipeId }
     }
+
+    fun getRecipesByIds(id: Set<Int>): List<Recipe> {
+        return burgerRecipes.filter { it.id in id }
+    }
 }
