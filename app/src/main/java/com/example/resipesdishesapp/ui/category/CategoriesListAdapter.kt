@@ -1,10 +1,12 @@
-package com.example.resipesdishesapp
+package com.example.resipesdishesapp.ui.category
 
 import android.graphics.drawable.Drawable
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.example.resipesdishesapp.model.Category
+import com.example.resipesdishesapp.R
 import com.example.resipesdishesapp.databinding.ItemCategoryBinding
 
 class CategoriesListAdapter(private val dataSet: List<Category>) :

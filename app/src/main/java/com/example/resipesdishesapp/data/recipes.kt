@@ -1,4 +1,8 @@
-package com.example.resipesdishesapp
+package com.example.resipesdishesapp.data
+
+import com.example.resipesdishesapp.model.Category
+import com.example.resipesdishesapp.model.Ingredient
+import com.example.resipesdishesapp.model.Recipe
 
 object STUB {
 

@@ -1,4 +1,4 @@
-package com.example.resipesdishesapp
+package com.example.resipesdishesapp.ui.recipe.listRecipes
 
 import android.graphics.drawable.Drawable
 import android.os.Bundle
@@ -10,7 +10,11 @@ import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.fragment.app.commit
 import androidx.fragment.app.replace
+import com.example.resipesdishesapp.data.KeysConstant
+import com.example.resipesdishesapp.R
+import com.example.resipesdishesapp.data.STUB
 import com.example.resipesdishesapp.databinding.FragmentRecipesListBinding
+import com.example.resipesdishesapp.ui.recipe.recipe.RecipeFragment
 
 
 class RecipesListFragment : Fragment() {

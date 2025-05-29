@@ -1,8 +1,9 @@
-package com.example.resipesdishesapp
+package com.example.resipesdishesapp.ui.recipe.recipe
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.example.resipesdishesapp.model.Ingredient
 import com.example.resipesdishesapp.databinding.ItemIngredientBinding
 
 class IngredientsAdapter(private val dataSet: List<Ingredient>) :
