@@ -8,7 +8,7 @@ import com.example.resipesdishesapp.model.Recipe
 
 class RecipeViewModel : ViewModel() {
 
-    private val _recipeState = MutableLiveData<RecipeState>()
+    private val _recipeState = MutableLiveData(RecipeState())
     val recipeState: LiveData<RecipeState> get() = _recipeState
 
 
