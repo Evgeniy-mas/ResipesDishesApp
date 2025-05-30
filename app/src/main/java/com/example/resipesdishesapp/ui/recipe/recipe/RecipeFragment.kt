@@ -11,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.SeekBar
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.resipesdishesapp.data.KeysConstant
 import com.example.resipesdishesapp.R
@@ -19,6 +20,8 @@ import com.example.resipesdishesapp.databinding.FragmentRecipeBinding
 import com.google.android.material.divider.MaterialDividerItemDecoration
 
 class RecipeFragment : Fragment() {
+
+    private val viewModel: RecipeViewModel by viewModels()
 
     var startPoint = 1
     var endPoint = 5
@@ -46,6 +49,10 @@ class RecipeFragment : Fragment() {
         initUI()
         initRecyclerIngredients()
         initRecyclerMethods()
+
+        viewModel.recipeState.observe(viewLifecycleOwner) { state ->
+            Log.i("!!!", "isFavorite value: ${state.isFavorite}")
+        }
     }
 
     private fun initBundleData() {
@@ -106,6 +113,7 @@ class RecipeFragment : Fragment() {
                 )
             }
             saveFavorites(currentFavorites)
+            viewModel.statusFavorite(isFavorite)
         }
     }
 
