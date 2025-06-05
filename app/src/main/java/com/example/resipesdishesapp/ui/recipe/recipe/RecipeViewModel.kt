@@ -27,29 +27,29 @@ class RecipeViewModel(application: Application) : AndroidViewModel(application) 
         val favorites = getFavorites()
         val isFavorite = favorites.contains(recipeId.toString())
 
-        _recipeState.value = RecipeState(
+        _recipeState.value = _recipeState.value?.copy(
             recipe = recipe,
-            portion = 1,
-            isFavorite = isFavorite
+            isFavorite = isFavorite,
+            portion = 1
         )
     }
 
     fun onFavoritesClicked() {
-        val currentState = _recipeState.value
-        val recipeId = currentState?.recipe?.id?.toString()
-        val favorites = getFavorites().toMutableSet()
+        _recipeState.value?.let { currentState ->
+            currentState.recipe?.id?.toString()?.let { recipeId ->
+                val favorites = getFavorites().toMutableSet()
+                val isFavorite = !currentState.isFavorite
 
-        val isFavorite = !currentState?.isFavorite!!
-        if (isFavorite) {
-            if (recipeId != null) {
-                favorites.add(recipeId)
+                if (isFavorite) {
+                    favorites.add(recipeId)
+                } else {
+                    favorites.remove(recipeId)
+                }
+
+                saveFavorites(favorites)
+                _recipeState.value = currentState.copy(isFavorite = isFavorite)
             }
-        } else {
-            favorites.remove(recipeId)
         }
-
-        saveFavorites(favorites)
-        _recipeState.value = currentState.copy(isFavorite = isFavorite)
     }
 
     private fun saveFavorites(idRecipe: Set<String>) {

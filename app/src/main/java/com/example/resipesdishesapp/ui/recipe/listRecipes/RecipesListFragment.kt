@@ -16,7 +16,6 @@ import com.example.resipesdishesapp.data.STUB
 import com.example.resipesdishesapp.databinding.FragmentRecipesListBinding
 import com.example.resipesdishesapp.ui.recipe.recipe.RecipeFragment
 
-
 class RecipesListFragment : Fragment() {
 
     private var categoryId: Int? = null
@@ -92,7 +91,7 @@ class RecipesListFragment : Fragment() {
     fun openRecipeByRecipeId(recipeId: Int) {
 
         val bundle = bundleOf(
-            KeysConstant.ARG_RECIPE to recipeId
+            KeysConstant.ARG_RECIPE_ID to recipeId
         )
 
         parentFragmentManager.commit {

@@ -40,7 +40,7 @@ class RecipeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val recipeId = arguments?.getInt(KeysConstant.ARG_RECIPE)
+        val recipeId = arguments?.getInt(KeysConstant.ARG_RECIPE_ID)
             ?: throw IllegalStateException("ID recipe not find")
         viewModel.loadRecipe(recipeId)
         initUI()
