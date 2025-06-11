@@ -1,8 +1,6 @@
 package com.example.resipesdishesapp.ui.recipe.recipe
 
-import android.graphics.drawable.Drawable
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -52,15 +50,7 @@ class RecipeFragment : Fragment() {
 
                 recipeBinding.tvTitle.text = recipe.title
 
-                try {
-                    val drawable = Drawable.createFromStream(
-                        requireContext().assets.open(recipe.imageUrlHeader),
-                        null
-                    )
-                    recipeBinding.ivRecipeImage.setImageDrawable(drawable)
-                } catch (e: Exception) {
-                    Log.e("RecipeFragment", "Error loading image", e)
-                }
+                recipeBinding.ivRecipeImage.setImageDrawable(state.recipeImage)
 
                 recipeBinding.ibAddToFavourites.setImageResource(
                     if (state.isFavorite) R.drawable.ic_heart_favourites

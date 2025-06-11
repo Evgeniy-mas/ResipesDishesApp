@@ -2,6 +2,8 @@ package com.example.resipesdishesapp.ui.recipe.recipe
 
 import android.app.Application
 import android.content.Context
+import android.graphics.drawable.Drawable
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -16,7 +18,7 @@ class RecipeViewModel(application: Application) : AndroidViewModel(application) 
 
     data class RecipeState(
         val recipe: Recipe? = null,
-        val imageUrl: String = "",
+        val recipeImage: Drawable? = null,
         val portion: Int = 1,
         val isFavorite: Boolean = false
     )
@@ -27,10 +29,19 @@ class RecipeViewModel(application: Application) : AndroidViewModel(application) 
         val favorites = getFavorites()
         val isFavorite = favorites.contains(recipeId.toString())
 
+        val drawable = try {
+            val inputStream = getApplication<Application>().assets.open(recipe.imageUrlHeader)
+            Drawable.createFromStream(inputStream, null)
+        } catch (e: Exception) {
+            Log.e("RecipeViewModel", "Error loading image", e)
+            null
+        }
+
         _recipeState.value = _recipeState.value?.copy(
             recipe = recipe,
             isFavorite = isFavorite,
-            portion = 1
+            portion = 1,
+            recipeImage = drawable
         )
     }
 
