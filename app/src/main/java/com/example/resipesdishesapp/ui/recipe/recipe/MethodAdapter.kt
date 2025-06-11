@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.resipesdishesapp.databinding.ItemMethodBinding
 
-class MethodAdapter(private val dataSet: List<String>) :
+class MethodAdapter(private var dataSet: List<String>) :
     RecyclerView.Adapter<MethodAdapter.ViewHolder>() {
 
     class ViewHolder(private val binding: ItemMethodBinding) :
@@ -15,7 +15,7 @@ class MethodAdapter(private val dataSet: List<String>) :
 
             with(binding) {
                 tvMethod.text = method
-                tvIndex.text = "${index + 1}."
+                "${index + 1}.".also { tvIndex.text = it }
             }
         }
     }
@@ -26,11 +26,15 @@ class MethodAdapter(private val dataSet: List<String>) :
         return ViewHolder(binding)
     }
 
-
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
         val method = dataSet[position]
         viewHolder.bind(method, position)
     }
 
     override fun getItemCount() = dataSet.size
+
+    fun updateMethod(newMethod: List<String>) {
+        dataSet = newMethod
+        notifyDataSetChanged()
     }
+}
