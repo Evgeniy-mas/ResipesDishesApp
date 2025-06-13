@@ -24,6 +24,9 @@ class RecipeFragment : Fragment() {
         get() = _recipeBinding
             ?: throw IllegalStateException("RecipeFragment must not be null")
 
+    private lateinit var ingredientsAdapter: IngredientsAdapter
+    private lateinit var methodAdapter: MethodAdapter
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -37,19 +40,24 @@ class RecipeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         val recipeId = arguments?.getInt(KeysConstant.ARG_RECIPE_ID)
             ?: throw IllegalStateException("ID recipe not find")
+        initAdapters()
         viewModel.loadRecipe(recipeId)
         initUI()
     }
 
-    private fun initUI() {
+    private fun initAdapters() {
 
-        val ingredientsAdapter = IngredientsAdapter(emptyList(), 1)
+        ingredientsAdapter = IngredientsAdapter()
+        methodAdapter = MethodAdapter()
+
         recipeBinding.rvIngredients.adapter = ingredientsAdapter
-        recyclerViewDivider(recipeBinding.rvIngredients)
-
-        val methodAdapter = MethodAdapter(emptyList())
         recipeBinding.rvMethod.adapter = methodAdapter
+
+        recyclerViewDivider(recipeBinding.rvIngredients)
         recyclerViewDivider(recipeBinding.rvMethod)
+    }
+
+    private fun initUI() {
 
         viewModel.recipeState.observe(viewLifecycleOwner) { state ->
             state.recipe?.let { recipe ->
@@ -63,8 +71,10 @@ class RecipeFragment : Fragment() {
                     else R.drawable.ic_heart_favourites_empty
                 )
 
-                ingredientsAdapter.updateIngredients(recipe.ingredients, state.portion)
-                methodAdapter.updateMethod(recipe.method)
+                ingredientsAdapter.dataSet = recipe.ingredients
+                ingredientsAdapter.quantityPortion = state.portion
+
+                methodAdapter.dataSet = recipe.method
 
                 recipeBinding.tvQuantityPortion.text = state.portion.toString()
                 recipeBinding.sbQuantityPortion.progress = state.portion
@@ -75,19 +85,12 @@ class RecipeFragment : Fragment() {
             viewModel.onFavoritesClicked()
         }
 
-        recipeBinding.sbQuantityPortion.setOnSeekBarChangeListener(object :
-            SeekBar.OnSeekBarChangeListener {
-
-            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+        recipeBinding.sbQuantityPortion.setOnSeekBarChangeListener(
+            PortionSeekBarListener { progress ->
                 recipeBinding.tvQuantityPortion.text = "$progress"
                 viewModel.updatePortion(progress)
-
             }
-
-            override fun onStartTrackingTouch(seekBar: SeekBar?) {}
-
-            override fun onStopTrackingTouch(seekBar: SeekBar?) {}
-        })
+        )
     }
 
     private fun recyclerViewDivider(recyclerView: RecyclerView) {
@@ -100,4 +103,15 @@ class RecipeFragment : Fragment() {
         divider.dividerThickness = resources.getDimensionPixelSize(R.dimen.divider)
         recyclerView.addItemDecoration(divider)
     }
+}
+
+class PortionSeekBarListener(val onChangeIngredients: (Int) -> Unit) :
+    SeekBar.OnSeekBarChangeListener {
+    override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+        onChangeIngredients(progress)
+    }
+
+    override fun onStartTrackingTouch(seekBar: SeekBar?) {}
+
+    override fun onStopTrackingTouch(seekBar: SeekBar?) {}
 }

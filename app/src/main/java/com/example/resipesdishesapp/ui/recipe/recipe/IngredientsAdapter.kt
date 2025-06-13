@@ -6,10 +6,22 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.resipesdishesapp.model.Ingredient
 import com.example.resipesdishesapp.databinding.ItemIngredientBinding
 
-class IngredientsAdapter(private var dataSet: List<Ingredient>, private var quantityPortion: Int) :
+class IngredientsAdapter :
     RecyclerView.Adapter<IngredientsAdapter.ViewHolder>() {
 
-        class ViewHolder(private val binding: ItemIngredientBinding) :
+    var dataSet: List<Ingredient> = emptyList()
+        set(value) {
+            field = value
+            notifyDataSetChanged()
+        }
+
+    var quantityPortion: Int = 1
+        set(value) {
+            field = value
+            notifyDataSetChanged()
+        }
+
+    class ViewHolder(private val binding: ItemIngredientBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(ingredient: Ingredient, quantityPortion: Int) {
@@ -38,10 +50,4 @@ class IngredientsAdapter(private var dataSet: List<Ingredient>, private var quan
     }
 
     override fun getItemCount() = dataSet.size
-
-    fun updateIngredients(newIngredients: List<Ingredient>, newPortion: Int) {
-        dataSet = newIngredients
-        quantityPortion = newPortion
-        notifyDataSetChanged()
-    }
 }
