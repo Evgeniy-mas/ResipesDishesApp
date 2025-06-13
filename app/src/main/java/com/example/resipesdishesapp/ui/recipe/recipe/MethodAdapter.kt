@@ -5,8 +5,14 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.resipesdishesapp.databinding.ItemMethodBinding
 
-class MethodAdapter(private var dataSet: List<String>) :
+class MethodAdapter :
     RecyclerView.Adapter<MethodAdapter.ViewHolder>() {
+
+    var dataSet: List<String> = emptyList()
+        set(value) {
+            field = value
+            notifyDataSetChanged()
+        }
 
     class ViewHolder(private val binding: ItemMethodBinding) :
         RecyclerView.ViewHolder(binding.root) {
@@ -32,9 +38,4 @@ class MethodAdapter(private var dataSet: List<String>) :
     }
 
     override fun getItemCount() = dataSet.size
-
-    fun updateMethod(newMethod: List<String>) {
-        dataSet = newMethod
-        notifyDataSetChanged()
-    }
 }
