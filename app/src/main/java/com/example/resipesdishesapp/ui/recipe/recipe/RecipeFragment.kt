@@ -9,18 +9,15 @@ import android.widget.SeekBar
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.resipesdishesapp.data.KeysConstant
 import com.example.resipesdishesapp.R
-import com.example.resipesdishesapp.model.Recipe
 import com.example.resipesdishesapp.databinding.FragmentRecipeBinding
 import com.google.android.material.divider.MaterialDividerItemDecoration
 
 class RecipeFragment : Fragment() {
 
     private val viewModel: RecipeViewModel by viewModels()
-
-    var startPoint = 1
-    var endPoint = 5
 
     private var _recipeBinding: FragmentRecipeBinding? = null
     private val recipeBinding: FragmentRecipeBinding
@@ -45,6 +42,15 @@ class RecipeFragment : Fragment() {
     }
 
     private fun initUI() {
+
+        val ingredientsAdapter = IngredientsAdapter(emptyList(), 1)
+        recipeBinding.rvIngredients.adapter = ingredientsAdapter
+        recyclerViewDivider(recipeBinding.rvIngredients)
+
+        val methodAdapter = MethodAdapter(emptyList())
+        recipeBinding.rvMethod.adapter = methodAdapter
+        recyclerViewDivider(recipeBinding.rvMethod)
+
         viewModel.recipeState.observe(viewLifecycleOwner) { state ->
             state.recipe?.let { recipe ->
 
@@ -57,8 +63,11 @@ class RecipeFragment : Fragment() {
                     else R.drawable.ic_heart_favourites_empty
                 )
 
-                initRecyclerIngredients(recipe)
-                initRecyclerMethods(recipe)
+                ingredientsAdapter.updateIngredients(recipe.ingredients, state.portion)
+                methodAdapter.updateMethod(recipe.method)
+
+                recipeBinding.tvQuantityPortion.text = state.portion.toString()
+                recipeBinding.sbQuantityPortion.progress = state.portion
             }
         }
 
@@ -71,25 +80,17 @@ class RecipeFragment : Fragment() {
 
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
                 recipeBinding.tvQuantityPortion.text = "$progress"
-                (recipeBinding.rvIngredients.adapter as? IngredientsAdapter)?.updateIngredients(
-                    progress
-                )
-                recipeBinding.rvIngredients.adapter?.notifyDataSetChanged()
+                viewModel.updatePortion(progress)
+
             }
 
-            override fun onStartTrackingTouch(seekBar: SeekBar?) {
-                seekBar?.progress?.let { startPoint = it }
-            }
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {}
 
-            override fun onStopTrackingTouch(seekBar: SeekBar?) {
-                seekBar?.progress?.let { endPoint = it }
-            }
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {}
         })
     }
 
-    private fun initRecyclerIngredients(recipe: Recipe) {
-        val ingredientsAdapter = IngredientsAdapter(recipe.ingredients)
-        recipeBinding.rvIngredients.adapter = ingredientsAdapter
+    private fun recyclerViewDivider(recyclerView: RecyclerView) {
         val divider =
             MaterialDividerItemDecoration(requireContext(), LinearLayoutManager.VERTICAL)
         divider.dividerInsetEnd = resources.getDimensionPixelSize(R.dimen.main_space_half_8)
@@ -97,19 +98,6 @@ class RecipeFragment : Fragment() {
         divider.isLastItemDecorated = false
         divider.dividerColor = ContextCompat.getColor(requireContext(), R.color.divider)
         divider.dividerThickness = resources.getDimensionPixelSize(R.dimen.divider)
-        recipeBinding.rvIngredients.addItemDecoration(divider)
-    }
-
-    private fun initRecyclerMethods(recipe: Recipe) {
-        val methodAdapter = MethodAdapter(recipe.method)
-        recipeBinding.rvMethod.adapter = methodAdapter
-        val divider =
-            MaterialDividerItemDecoration(requireContext(), LinearLayoutManager.VERTICAL)
-        divider.dividerInsetEnd = resources.getDimensionPixelSize(R.dimen.main_space_half_8)
-        divider.dividerInsetStart = resources.getDimensionPixelSize(R.dimen.main_space_half_8)
-        divider.isLastItemDecorated = false
-        divider.dividerColor = ContextCompat.getColor(requireContext(), R.color.divider)
-        divider.dividerThickness = resources.getDimensionPixelSize(R.dimen.divider)
-        recipeBinding.rvMethod.addItemDecoration(divider)
+        recyclerView.addItemDecoration(divider)
     }
 }

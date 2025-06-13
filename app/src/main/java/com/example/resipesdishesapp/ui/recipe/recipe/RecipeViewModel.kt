@@ -81,4 +81,8 @@ class RecipeViewModel(application: Application) : AndroidViewModel(application) 
         )
         return sharedPrefs.getStringSet(KeysConstant.FAVORITES_KEY, HashSet()) ?: HashSet()
     }
+
+    fun updatePortion(portion: Int) {
+        _recipeState.value = recipeState.value?.copy(portion = portion)
+    }
 }

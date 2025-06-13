@@ -6,17 +6,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.resipesdishesapp.model.Ingredient
 import com.example.resipesdishesapp.databinding.ItemIngredientBinding
 
-class IngredientsAdapter(private val dataSet: List<Ingredient>) :
+class IngredientsAdapter(private var dataSet: List<Ingredient>, private var quantityPortion: Int) :
     RecyclerView.Adapter<IngredientsAdapter.ViewHolder>() {
 
-    companion object {
-        var quantityPortion = 1
-    }
-
-    class ViewHolder(private val binding: ItemIngredientBinding) :
+        class ViewHolder(private val binding: ItemIngredientBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(ingredient: Ingredient) {
+        fun bind(ingredient: Ingredient, quantityPortion: Int) {
             val calculatePortion = ingredient.quantity.toDouble() * quantityPortion
 
             val newQuantity = if (calculatePortion % 1 == 0.0) {
@@ -38,13 +34,14 @@ class IngredientsAdapter(private val dataSet: List<Ingredient>) :
     }
 
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
-        val ingredient = dataSet[position]
-        viewHolder.bind(ingredient)
+        viewHolder.bind(dataSet[position], quantityPortion)
     }
 
     override fun getItemCount() = dataSet.size
 
-    fun updateIngredients(progress: Int) {
-        quantityPortion = progress
+    fun updateIngredients(newIngredients: List<Ingredient>, newPortion: Int) {
+        dataSet = newIngredients
+        quantityPortion = newPortion
+        notifyDataSetChanged()
     }
 }
