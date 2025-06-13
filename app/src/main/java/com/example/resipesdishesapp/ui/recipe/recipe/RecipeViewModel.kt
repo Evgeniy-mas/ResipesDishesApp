@@ -83,6 +83,6 @@ class RecipeViewModel(application: Application) : AndroidViewModel(application) 
     }
 
     fun updatePortion(portion: Int) {
-        _recipeState.value = _recipeState.value?.copy(portion = portion)
+        _recipeState.value = recipeState.value?.copy(portion = portion)
     }
 }
