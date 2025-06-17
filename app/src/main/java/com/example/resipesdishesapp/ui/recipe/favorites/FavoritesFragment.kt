@@ -1,6 +1,5 @@
 package com.example.resipesdishesapp.ui.recipe.favorites
 
-import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -8,11 +7,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.fragment.app.commit
+import androidx.fragment.app.viewModels
 import com.example.resipesdishesapp.data.KeysConstant
 import com.example.resipesdishesapp.R
 import com.example.resipesdishesapp.ui.recipe.recipe.RecipeFragment
 import com.example.resipesdishesapp.ui.recipe.listRecipes.RecipesListAdapter
-import com.example.resipesdishesapp.data.STUB
 import com.example.resipesdishesapp.databinding.FragmentFavoritesBinding
 
 class FavoritesFragment : Fragment() {
@@ -22,6 +21,7 @@ class FavoritesFragment : Fragment() {
             ?: throw IllegalStateException("FragmentFavoritesBinding must not be null")
 
     private lateinit var recipesAdapter: RecipesListAdapter
+    private val viewModel: FavoritesViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -35,7 +35,7 @@ class FavoritesFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initRecycler()
-        loadFavorites()
+        viewModel.loadFavorites()
     }
 
     private fun initRecycler() {
@@ -48,27 +48,14 @@ class FavoritesFragment : Fragment() {
         }
 
         favoritesBinding.rvFavorites.adapter = recipesAdapter
-    }
 
-    private fun loadFavorites() {
-        val favoriteIds = getFavorites().map { it.toInt() }.toSet()
-        val favoriteRecipes = STUB.getRecipesByIds(favoriteIds)
-        recipesAdapter.updateRecipes(favoriteRecipes)
+        viewModel.favoritesState.observe(viewLifecycleOwner) { state ->
+            recipesAdapter.updateRecipes(state.favoriteRecipes)
 
-        if (favoriteRecipes.isEmpty()) {
-            favoritesBinding.tvEmptyFavorites.visibility = View.VISIBLE
-            favoritesBinding.rvFavorites.visibility = View.GONE
-        } else {
-            favoritesBinding.tvEmptyFavorites.visibility = View.GONE
+            favoritesBinding.tvEmptyFavorites.visibility =
+                if (state.isEmpty) View.VISIBLE else View.GONE
+            favoritesBinding.rvFavorites.visibility = if (state.isEmpty) View.GONE else View.VISIBLE
         }
-    }
-
-    private fun getFavorites(): Set<String> {
-        val sharedPrefs = requireContext().getSharedPreferences(
-            KeysConstant.PREFS_SHARED,
-            Context.MODE_PRIVATE
-        )
-        return sharedPrefs.getStringSet(KeysConstant.FAVORITES_KEY, emptySet()) ?: emptySet()
     }
 
     private fun openRecipeByRecipeId(recipeId: Int) {
