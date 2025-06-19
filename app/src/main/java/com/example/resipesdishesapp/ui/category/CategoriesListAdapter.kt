@@ -9,7 +9,7 @@ import com.example.resipesdishesapp.model.Category
 import com.example.resipesdishesapp.R
 import com.example.resipesdishesapp.databinding.ItemCategoryBinding
 
-class CategoriesListAdapter(private val dataSet: List<Category>) :
+class CategoriesListAdapter(private var dataSet: List<Category>) :
     RecyclerView.Adapter<CategoriesListAdapter.ViewHolder>() {
 
     interface OnItemClickListener {
@@ -22,6 +22,10 @@ class CategoriesListAdapter(private val dataSet: List<Category>) :
         itemClickListener = listener
     }
 
+    fun updateCategories(category: List<Category>) {
+        dataSet = category
+        notifyDataSetChanged()
+    }
 
     class ViewHolder(private val binding: ItemCategoryBinding) :
         RecyclerView.ViewHolder(binding.root) {
@@ -70,4 +74,4 @@ class CategoriesListAdapter(private val dataSet: List<Category>) :
     }
 
     override fun getItemCount() = dataSet.size
-    }
+}

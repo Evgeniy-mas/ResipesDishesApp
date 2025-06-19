@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.fragment.app.commit
 import androidx.fragment.app.replace
+import androidx.fragment.app.viewModels
 import com.example.resipesdishesapp.data.KeysConstant
 import com.example.resipesdishesapp.R
 import com.example.resipesdishesapp.ui.recipe.listRecipes.RecipesListFragment
@@ -21,6 +22,9 @@ class CategoriesListFragment : Fragment() {
         get() = _categoriesBinding
             ?: throw IllegalStateException("FragmentListCategoriesBinding must not be null")
 
+    private val viewModel: CategoriesListViewModel by viewModels()
+    private lateinit var categoriesAdapter: CategoriesListAdapter
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -33,6 +37,7 @@ class CategoriesListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initRecycler()
+        viewModel.loadCategories()
     }
 
     override fun onDestroyView() {
@@ -41,17 +46,19 @@ class CategoriesListFragment : Fragment() {
     }
 
     private fun initRecycler() {
-        val categoriesAdapter = CategoriesListAdapter(STUB.getCategories())
+
+        categoriesAdapter = CategoriesListAdapter(emptyList()).apply {
+            setOnItemClickListener(object : CategoriesListAdapter.OnItemClickListener {
+                override fun onItemClick(categoryId: Int) {
+                    openRecipesByCategoryId(categoryId)
+                }
+            })
+        }
         categoriesBinding.rvCategories.adapter = categoriesAdapter
 
-        categoriesAdapter.setOnItemClickListener(object :
-            CategoriesListAdapter.OnItemClickListener {
-
-            override fun onItemClick(categoryId: Int) {
-                openRecipesByCategoryId(categoryId)
-            }
+        viewModel.categoriesState.observe(viewLifecycleOwner) { state ->
+            categoriesAdapter.updateCategories(state.categories)
         }
-        )
     }
 
     fun openRecipesByCategoryId(categoryId: Int) {
@@ -70,8 +77,3 @@ class CategoriesListFragment : Fragment() {
         }
     }
 }
-
-
-
-
-
