@@ -9,6 +9,7 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.commit
 import androidx.fragment.app.replace
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import com.example.resipesdishesapp.data.KeysConstant
 import com.example.resipesdishesapp.R
 import com.example.resipesdishesapp.ui.recipe.listRecipes.RecipesListFragment
@@ -70,10 +71,6 @@ class CategoriesListFragment : Fragment() {
             KeysConstant.ARG_CATEGORY_IMAGE_URL to category?.imageUrl
         )
 
-        parentFragmentManager.commit {
-            setReorderingAllowed(true)
-            replace<RecipesListFragment>(R.id.mainContainer, args = bundle)
-            addToBackStack(null)
-        }
+        findNavController().navigate(R.id.recipesListFragment, bundle)
     }
 }
