@@ -6,11 +6,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
-import androidx.fragment.app.commit
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import com.example.resipesdishesapp.data.KeysConstant
 import com.example.resipesdishesapp.R
-import com.example.resipesdishesapp.ui.recipe.recipe.RecipeFragment
 import com.example.resipesdishesapp.ui.recipe.listRecipes.RecipesListAdapter
 import com.example.resipesdishesapp.databinding.FragmentFavoritesBinding
 
@@ -63,11 +62,7 @@ class FavoritesFragment : Fragment() {
             KeysConstant.ARG_RECIPE_ID to recipeId,
         )
 
-        parentFragmentManager.commit {
-            setReorderingAllowed(true)
-            replace(R.id.mainContainer, RecipeFragment::class.java, bundle)
-            addToBackStack(null)
-        }
+        findNavController().navigate(R.id.recipeFragment, bundle)
     }
 
     override fun onDestroyView() {
