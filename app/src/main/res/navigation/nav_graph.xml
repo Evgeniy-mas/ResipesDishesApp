@@ -37,6 +37,9 @@
         <action
             android:id="@+id/action_recipeFragment_to_favoritesFragment"
             app:destination="@id/favoritesFragment" />
+        <argument
+            android:name="recipeId"
+            app:argType="integer" />
     </fragment>
     <fragment
         android:id="@+id/favoritesFragment"
