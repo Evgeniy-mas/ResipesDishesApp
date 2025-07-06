@@ -7,10 +7,12 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import com.example.resipesdishesapp.data.KeysConstant
+import androidx.navigation.fragment.navArgs
 import com.example.resipesdishesapp.databinding.FragmentRecipesListBinding
 
 class RecipesListFragment : Fragment() {
+
+    private val args: RecipesListFragmentArgs by navArgs()
 
     private val viewModel: RecipesListViewModel by viewModels()
     private var _recipesBinding: FragmentRecipesListBinding? = null
@@ -32,12 +34,10 @@ class RecipesListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val categoryId = arguments?.getInt(KeysConstant.ARG_CATEGORY_ID) ?: 0
-        val categoryName = arguments?.getString(KeysConstant.ARG_CATEGORY_NAME)
-        val categoryImageUrl = arguments?.getString(KeysConstant.ARG_CATEGORY_IMAGE_URL)
+        val category = args.category
 
         initRecycler()
-        viewModel.loadData(categoryId, categoryName, categoryImageUrl)
+        viewModel.loadData(category.id, category.title, category.imageUrl)
     }
 
     private fun initRecycler() {

@@ -58,11 +58,11 @@ class FavoritesFragment : Fragment() {
     }
 
     private fun openRecipeByRecipeId(recipeId: Int) {
-        val bundle = bundleOf(
-            KeysConstant.ARG_RECIPE_ID to recipeId,
+        findNavController().navigate(
+            FavoritesFragmentDirections.actionFavoritesFragmentToRecipeFragment(
+                recipeId
+            )
         )
-
-        findNavController().navigate(R.id.recipeFragment, bundle)
     }
 
     override fun onDestroyView() {

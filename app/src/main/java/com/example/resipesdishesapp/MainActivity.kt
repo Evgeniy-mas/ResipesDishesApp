@@ -25,11 +25,59 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.btnFavorites.setOnClickListener {
-            findNavController(R.id.mainContainer).navigate(R.id.favoritesFragment)
+            val currentFragment = findNavController(R.id.mainContainer).currentDestination?.id
+
+            when (currentFragment) {
+                R.id.categoriesListFragment -> {
+                    findNavController(R.id.mainContainer).navigate(
+                        R.id.action_categoriesListFragment_to_favoritesFragment
+                    )
+                }
+
+                R.id.recipesListFragment -> {
+                    findNavController(R.id.mainContainer).navigate(
+                        R.id.action_recipesListFragment_to_favoritesFragment
+                    )
+                }
+
+                R.id.recipeFragment -> {
+                    findNavController(R.id.mainContainer).navigate(
+                        R.id.action_recipeFragment_to_favoritesFragment
+                    )
+                }
+
+                else -> {
+                    findNavController(R.id.mainContainer).navigate(R.id.favoritesFragment)
+                }
+            }
         }
 
         binding.btnCategory.setOnClickListener {
-            findNavController(R.id.mainContainer).navigate(R.id.categoriesListFragment)
+            val currentFragment = findNavController(R.id.mainContainer).currentDestination?.id
+
+            when (currentFragment) {
+                R.id.recipesListFragment -> {
+                    findNavController(R.id.mainContainer).navigate(
+                        R.id.action_recipesListFragment_to_categoriesListFragment
+                    )
+                }
+
+                R.id.recipeFragment -> {
+                    findNavController(R.id.mainContainer).navigate(
+                        R.id.action_recipeFragment_to_categoriesListFragment
+                    )
+                }
+
+                R.id.favoritesFragment -> {
+                    findNavController(R.id.mainContainer).navigate(
+                        R.id.action_favoritesFragment_to_categoriesListFragment
+                    )
+                }
+
+                else -> {
+                    findNavController(R.id.mainContainer).navigate(R.id.categoriesListFragment)
+                }
             }
         }
     }
+}
