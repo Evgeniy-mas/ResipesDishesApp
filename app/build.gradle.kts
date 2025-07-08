@@ -3,7 +3,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     id("kotlin-parcelize")
     id("androidx.navigation.safeargs.kotlin")
-
+    kotlin("plugin.serialization") version "2.1.0"
 }
 
 android {
@@ -42,11 +42,9 @@ android {
     }
 }
 
-
-
-
-
 dependencies {
+    implementation (libs.google.gson)
+    implementation(libs.kotlinx.serialization.json)
     implementation(libs.androidx.cardview)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
@@ -66,8 +64,4 @@ dependencies {
     implementation(libs.androidx.fragment)
     // Kotlin
     implementation(libs.androidx.fragment.ktx)
-
-
-
-
 }
