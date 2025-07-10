@@ -9,14 +9,18 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.navigation.findNavController
 import com.example.resipesdishesapp.databinding.ActivityMainBinding
 import com.example.resipesdishesapp.model.Category
+import com.example.resipesdishesapp.model.Recipe
 import kotlinx.serialization.json.Json
 import java.net.HttpURLConnection
 import java.net.URL
+import java.util.concurrent.Executors
 
 class MainActivity : AppCompatActivity() {
     private val binding: ActivityMainBinding by lazy {
         ActivityMainBinding.inflate(layoutInflater)
     }
+
+    private val threadPool = Executors.newFixedThreadPool(10)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,9 +41,26 @@ class MainActivity : AppCompatActivity() {
 
             val responseBody = connection.inputStream.bufferedReader().readText()
             val categories = Json.decodeFromString<List<Category>>(responseBody)
-            Log.i("data", "$categories")
+            Log.i("Categories", "Всего ${categories.size} категорий")
 
-            Log.i("!!!", "body: $responseBody")
+            categories.forEach { category ->
+                threadPool.execute {
+
+                    val url1 =
+                        URL("https://recipes.androidsprint.ru/api/category/${category.id}/recipes")
+                    val connection1 = url1.openConnection() as HttpURLConnection
+                    connection1.connect()
+                    val responseBody1 = connection1.inputStream.bufferedReader().readText()
+                    val recipes = Json.decodeFromString<List<Recipe>>(responseBody1)
+
+                    Log.i(
+                        "!!!",
+                        "Для категории ${category.title} получено ${recipes.size} рецептов"
+                    )
+
+                    Log.i("AllRecipes", "$recipes")
+                }
+            }
         }
         thread.start()
 
