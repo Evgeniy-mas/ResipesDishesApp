@@ -2,7 +2,9 @@ package com.example.resipesdishesapp.model
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
 
+@Serializable
 @Parcelize
 data class Recipe(
     val id: Int,
@@ -17,7 +19,7 @@ data class Recipe(
             
             """.trimIndent()),
     val imageUrl: String,
-    val imageUrlHeader: String
+    val imageUrlHeader: String? = null
 ):Parcelable
 
 

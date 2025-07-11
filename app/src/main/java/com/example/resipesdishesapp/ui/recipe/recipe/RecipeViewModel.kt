@@ -30,7 +30,11 @@ class RecipeViewModel(application: Application) : AndroidViewModel(application) 
         val isFavorite = favorites.contains(recipeId.toString())
 
         val drawable = try {
-            val inputStream = getApplication<Application>().assets.open(recipe.imageUrlHeader)
+            val inputStream = recipe.imageUrlHeader?.let {
+                getApplication<Application>().assets.open(
+                    it
+                )
+            }
             Drawable.createFromStream(inputStream, null)
         } catch (e: Exception) {
             Log.e("RecipeViewModel", "Error loading image", e)
