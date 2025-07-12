@@ -43,6 +43,8 @@ android {
 }
 
 dependencies {
+    implementation(libs.logging.interceptor)
+    implementation(libs.okhttp)
     implementation (libs.google.gson)
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.androidx.cardview)

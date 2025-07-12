@@ -11,8 +11,9 @@ import com.example.resipesdishesapp.databinding.ActivityMainBinding
 import com.example.resipesdishesapp.model.Category
 import com.example.resipesdishesapp.model.Recipe
 import kotlinx.serialization.json.Json
-import java.net.HttpURLConnection
-import java.net.URL
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.logging.HttpLoggingInterceptor
 import java.util.concurrent.Executors
 
 class MainActivity : AppCompatActivity() {
@@ -22,47 +23,60 @@ class MainActivity : AppCompatActivity() {
 
     private val threadPool = Executors.newFixedThreadPool(10)
 
+    private val loggingInterceptor = HttpLoggingInterceptor()
+        .setLevel(HttpLoggingInterceptor.Level.BODY)
+
+    private val okHttpClient = OkHttpClient().newBuilder()
+        .addInterceptor(loggingInterceptor)
+        .build()
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(binding.root)
 
-        Log.i(
-            "onCreateThread",
-            "Метод onCreate() выполняется на потоке:${Thread.currentThread().name}"
-        )
+        threadPool.execute {
+            Log.i("Network", "Запрос категорий на потоке: ${Thread.currentThread().name}")
+            val categoryRequest = Request.Builder()
+                .url("https://recipes.androidsprint.ru/api/category")
+                .build()
 
-        val thread = Thread {
-            Log.i("thread", "Выполняю запрос на потоке: ${Thread.currentThread().name}")
+            okHttpClient.newCall(categoryRequest).execute().use { response ->
+                if (!response.isSuccessful) {
+                    Log.e("Error", "Ошибка запроса категорий: ${response.code}")
+                }
+                val responseBody = response.body?.string() ?: ""
+                val categories = Json.decodeFromString<List<Category>>(responseBody)
+                Log.i("Categories", "Всего ${categories.size} категорий")
 
-            val url = URL("https://recipes.androidsprint.ru/api/category")
-            val connection = url.openConnection() as HttpURLConnection
-            connection.connect()
+                categories.forEach { category ->
+                    threadPool.execute {
+                        Log.i(
+                            "Network",
+                            "Запрос рецептов для ${category.title} на потоке: ${Thread.currentThread().name}"
+                        )
+                        val recipesRequest = Request.Builder()
+                            .url("https://recipes.androidsprint.ru/api/category/${category.id}/recipes")
+                            .build()
 
-            val responseBody = connection.inputStream.bufferedReader().readText()
-            val categories = Json.decodeFromString<List<Category>>(responseBody)
-            Log.i("Categories", "Всего ${categories.size} категорий")
+                        okHttpClient.newCall(recipesRequest).execute().use { recipesResponse ->
+                            if (!recipesResponse.isSuccessful) {
+                                Log.e("Error", "Ошибка запроса рецептов: ${recipesResponse.code}")
+                            }
 
-            categories.forEach { category ->
-                threadPool.execute {
-
-                    val url1 =
-                        URL("https://recipes.androidsprint.ru/api/category/${category.id}/recipes")
-                    val connection1 = url1.openConnection() as HttpURLConnection
-                    connection1.connect()
-                    val responseBody1 = connection1.inputStream.bufferedReader().readText()
-                    val recipes = Json.decodeFromString<List<Recipe>>(responseBody1)
-
-                    Log.i(
-                        "!!!",
-                        "Для категории ${category.title} получено ${recipes.size} рецептов"
-                    )
-
-                    Log.i("AllRecipes", "$recipes")
+                            val responseBodyRecipe = recipesResponse.body?.string() ?: ""
+                            val recipes = Json.decodeFromString<List<Recipe>>(responseBodyRecipe)
+                            Log.i(
+                                "!!!",
+                                "Для категории ${category.title} получено ${recipes.size} рецептов"
+                            )
+                            Log.i("AllRecipes", "$recipes")
+                        }
+                    }
                 }
             }
         }
-        thread.start()
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -125,5 +139,10 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        threadPool.shutdown()
     }
 }
