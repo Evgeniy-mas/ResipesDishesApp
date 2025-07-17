@@ -6,13 +6,14 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.resipesdishesapp.data.KeysConstant
-import com.example.resipesdishesapp.data.STUB
+import com.example.resipesdishesapp.data.RecipesRepository
 import com.example.resipesdishesapp.model.Recipe
 
 class FavoritesViewModel(application: Application) : AndroidViewModel(application) {
 
     private val _favoritesState = MutableLiveData(FavoritesState())
     val favoritesState: LiveData<FavoritesState> get() = _favoritesState
+    private val recipesRepository = RecipesRepository(application.applicationContext)
 
     data class FavoritesState(
         val favoriteRecipes: List<Recipe> = emptyList(),
@@ -20,13 +21,23 @@ class FavoritesViewModel(application: Application) : AndroidViewModel(applicatio
     )
 
     fun loadFavorites() {
-        val favoriteIds = getFavorites().map { it.toInt() }.toSet()
-        val recipes = STUB.getRecipesByIds(favoriteIds)
+        val favoriteIds = getFavorites().mapNotNull { it.toIntOrNull() }.toSet()
 
-        _favoritesState.value = FavoritesState(
-            favoriteRecipes = recipes,
-            isEmpty = recipes.isEmpty()
-        )
+        if (favoriteIds.isEmpty()) {
+            _favoritesState.value = FavoritesState(
+                isEmpty = true
+            )
+            return
+        }
+
+        recipesRepository.getListRecipeId(favoriteIds) { recipes ->
+            _favoritesState.postValue(
+                FavoritesState(
+                    favoriteRecipes = recipes,
+                    isEmpty = recipes.isEmpty()
+                )
+            )
+        }
     }
 
     private fun getFavorites(): Set<String> {

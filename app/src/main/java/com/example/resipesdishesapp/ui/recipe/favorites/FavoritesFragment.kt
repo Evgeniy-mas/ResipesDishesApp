@@ -5,11 +5,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import com.example.resipesdishesapp.data.KeysConstant
-import com.example.resipesdishesapp.R
 import com.example.resipesdishesapp.ui.recipe.listRecipes.RecipesListAdapter
 import com.example.resipesdishesapp.databinding.FragmentFavoritesBinding
 
