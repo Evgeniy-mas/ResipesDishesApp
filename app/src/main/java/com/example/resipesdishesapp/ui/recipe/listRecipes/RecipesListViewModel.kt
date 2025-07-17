@@ -7,13 +7,14 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.resipesdishesapp.R
-import com.example.resipesdishesapp.data.STUB
+import com.example.resipesdishesapp.data.RecipesRepository
 import com.example.resipesdishesapp.model.Recipe
 
 class RecipesListViewModel(application: Application) : AndroidViewModel(application) {
 
     private val _recipesListState = MutableLiveData(RecipesListState())
     val recipesListState: LiveData<RecipesListState> get() = _recipesListState
+    private val recipesRepository = RecipesRepository(application.applicationContext)
 
     data class RecipesListState(
         val categoryName: String? = null,
@@ -37,12 +38,21 @@ class RecipesListViewModel(application: Application) : AndroidViewModel(applicat
                 null
             }
 
-        val recipes = STUB.getRecipesByCategoryId(categoryId)
 
         _recipesListState.value = RecipesListState(
             categoryName = categoryName,
             categoryImage = drawable,
-            recipes = recipes
+            recipes = emptyList()
         )
+
+     recipesRepository.getRecipesCategoryId(categoryId) {recipes ->
+            _recipesListState.postValue(
+                RecipesListState(
+                    categoryName = categoryName,
+                    categoryImage = drawable,
+                    recipes = recipes
+                )
+            )
+        }
     }
 }
