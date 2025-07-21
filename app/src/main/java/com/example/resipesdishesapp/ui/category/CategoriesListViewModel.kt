@@ -4,28 +4,42 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.example.resipesdishesapp.data.NetworkResult
 import com.example.resipesdishesapp.data.RecipesRepository
 import com.example.resipesdishesapp.model.Category
 
 class CategoriesListViewModel(application: Application) : AndroidViewModel(application) {
 
-    private val recipesRepository = RecipesRepository(application.applicationContext)
-
+    private val recipesRepository = RecipesRepository()
     private val _categoriesState = MutableLiveData(CategoriesListState())
     val categoriesState: LiveData<CategoriesListState> get() = _categoriesState
 
     data class CategoriesListState(
-        val categories: List<Category> = emptyList()
+        val categories: List<Category> = emptyList(),
+        val errorId: Int? = null
     )
 
     fun loadCategories() {
-        recipesRepository.getCategories { categories ->
+        recipesRepository.getCategories { result ->
+            when (result) {
+                is NetworkResult.Success -> {
+                    _categoriesState.postValue(
+                        CategoriesListState(
+                            categories = result.data,
+                            errorId = null
+                        )
+                    )
+                }
 
-            _categoriesState.postValue(
-                CategoriesListState(
-                    categories = categories
-                )
-            )
+                is NetworkResult.Error -> {
+                    _categoriesState.postValue(
+                        CategoriesListState(
+                            categories = emptyList(),
+                            errorId = result.errorId
+                        )
+                    )
+                }
+            }
         }
     }
 }

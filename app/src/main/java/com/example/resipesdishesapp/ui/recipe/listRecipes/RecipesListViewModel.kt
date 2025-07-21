@@ -7,6 +7,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.resipesdishesapp.R
+import com.example.resipesdishesapp.data.NetworkResult
 import com.example.resipesdishesapp.data.RecipesRepository
 import com.example.resipesdishesapp.model.Recipe
 
@@ -14,13 +15,13 @@ class RecipesListViewModel(application: Application) : AndroidViewModel(applicat
 
     private val _recipesListState = MutableLiveData(RecipesListState())
     val recipesListState: LiveData<RecipesListState> get() = _recipesListState
-    private val recipesRepository = RecipesRepository(application.applicationContext)
+    private val recipesRepository = RecipesRepository()
 
     data class RecipesListState(
         val categoryName: String? = null,
         val categoryImage: Drawable? = null,
-        val recipes: List<Recipe> = emptyList()
-
+        val recipes: List<Recipe> = emptyList(),
+        val errorId: Int? = null
     )
 
     fun loadData(categoryId: Int, categoryName: String?, categoryImageUrl: String?) {
@@ -38,21 +39,35 @@ class RecipesListViewModel(application: Application) : AndroidViewModel(applicat
                 null
             }
 
-
         _recipesListState.value = RecipesListState(
             categoryName = categoryName,
             categoryImage = drawable,
             recipes = emptyList()
         )
 
-     recipesRepository.getRecipesCategoryId(categoryId) {recipes ->
-            _recipesListState.postValue(
-                RecipesListState(
-                    categoryName = categoryName,
-                    categoryImage = drawable,
-                    recipes = recipes
-                )
-            )
+        recipesRepository.getRecipesCategoryId(categoryId) { result ->
+            when (result) {
+                is NetworkResult.Success -> {
+                    _recipesListState.postValue(
+                        RecipesListState(
+                            categoryName = categoryName,
+                            categoryImage = drawable,
+                            recipes = result.data
+                        )
+                    )
+                }
+
+                is NetworkResult.Error -> {
+                    _recipesListState.postValue(
+                        RecipesListState(
+                            categoryName = categoryName,
+                            categoryImage = drawable,
+                            recipes = emptyList(),
+                            errorId = result.errorId
+                        )
+                    )
+                }
+            }
         }
     }
 }

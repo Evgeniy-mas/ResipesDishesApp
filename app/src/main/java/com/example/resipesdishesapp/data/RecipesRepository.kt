@@ -1,9 +1,5 @@
 package com.example.resipesdishesapp.data
 
-import android.content.Context
-import android.os.Handler
-import android.os.Looper
-import android.widget.Toast
 import com.example.resipesdishesapp.R
 import com.example.resipesdishesapp.model.Category
 import com.example.resipesdishesapp.model.Recipe
@@ -13,7 +9,7 @@ import okhttp3.MediaType.Companion.toMediaType
 import retrofit2.Retrofit
 import java.util.concurrent.Executors
 
-class RecipesRepository(private val context: Context) {
+class RecipesRepository {
 
     private val threadPool = Executors.newFixedThreadPool(10)
 
@@ -24,87 +20,77 @@ class RecipesRepository(private val context: Context) {
             .addConverterFactory(Json.asConverterFactory(contentType))
             .build()
     }
+    private val service by lazy {
+        retrofit.create(RecipeApiService::class.java)
+    }
 
-    fun getCategories(callback: (List<Category>) -> Unit) {
+    fun getCategories(callback: (NetworkResult<List<Category>>) -> Unit) {
         threadPool.execute {
             try {
-                val service: RecipeApiService = retrofit.create(RecipeApiService::class.java)
                 val categoriesResponse = service.getCategories().execute()
                 if (categoriesResponse.isSuccessful) {
                     categoriesResponse.body()?.let {
-                        callback(it)
+                        callback(NetworkResult.Success(it))
                     } ?: run {
-                        showError(R.string.errorData.toString())
-                        callback(emptyList())
+                        callback(NetworkResult.Error(R.string.errorData))
                     }
                 }
             } catch (e: Exception) {
-                showError(R.string.errorConnect.toString())
-                callback(emptyList())
+                callback(NetworkResult.Error(R.string.errorConnect))
             }
         }
     }
 
-    fun getRecipesCategoryId(categoryId: Int, callback: (List<Recipe>) -> Unit) {
+    fun getRecipesCategoryId(categoryId: Int, callback: (NetworkResult<List<Recipe>>) -> Unit) {
         threadPool.execute {
             try {
-                val service: RecipeApiService = retrofit.create(RecipeApiService::class.java)
                 val recipesResponse = service.getRecipesByCategoryId(categoryId).execute()
                 if (recipesResponse.isSuccessful) {
                     recipesResponse.body()?.let {
-                        callback(it)
+                        callback(NetworkResult.Success(it))
                     } ?: run {
-                        showError(R.string.errorData.toString())
-                        callback(emptyList())
+                        callback(NetworkResult.Error(R.string.errorData))
                     }
                 }
             } catch (e: Exception) {
-                showError(R.string.errorConnect.toString())
-                callback(emptyList())
+                callback(NetworkResult.Error(R.string.errorConnect))
             }
         }
     }
 
-    fun getRecipeById(recipeId: Int, callback: (Recipe) -> Unit) {
+    fun getRecipeById(recipeId: Int, callback: (NetworkResult<Recipe>) -> Unit) {
         threadPool.execute {
             try {
-                val service: RecipeApiService = retrofit.create(RecipeApiService::class.java)
+
                 val recipeResponse = service.getRecipeById(recipeId).execute()
                 if (recipeResponse.isSuccessful) {
                     recipeResponse.body()?.let {
-                        callback(it)
+                        callback(NetworkResult.Success(it))
                     } ?: run {
-                        showError(R.string.errorData.toString())
+                        callback(NetworkResult.Error(R.string.errorData))
                     }
                 }
             } catch (e: Exception) {
-                showError(R.string.errorConnect.toString())
+                callback(NetworkResult.Error(R.string.errorConnect))
             }
         }
     }
 
-    fun getListRecipeId(recipesId: Set<Int>, callback: (List<Recipe>) -> Unit) {
+    fun getListRecipeId(recipesId: Set<Int>, callback: (NetworkResult<List<Recipe>>) -> Unit) {
         threadPool.execute {
             try {
-                val service: RecipeApiService = retrofit.create(RecipeApiService::class.java)
                 val idsString = recipesId.joinToString(",")
                 val recipesResponse = service.getListRecipeId(idsString).execute()
                 if (recipesResponse.isSuccessful) {
                     recipesResponse.body()?.let {
-                        callback(it)
+                        callback(NetworkResult.Success(it))
                     } ?: run {
-                        showError(R.string.errorData.toString())
+                        callback(NetworkResult.Error(R.string.errorData))
                     }
                 }
             } catch (e: Exception) {
-                showError(R.string.errorConnect.toString())
+                callback(NetworkResult.Error(R.string.errorConnect))
             }
-        }
-    }
-
-    private fun showError(message: String) {
-        Handler(Looper.getMainLooper()).post {
-            Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
         }
     }
 }
