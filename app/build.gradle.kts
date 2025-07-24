@@ -43,6 +43,7 @@ android {
 }
 
 dependencies {
+    
     implementation(libs.logging.interceptor)
     implementation(libs.okhttp)
     implementation (libs.google.gson)
@@ -59,6 +60,8 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     implementation(libs.androidx.navigation.compose)
+    implementation(libs.retrofit.v290)
+    implementation(libs.retrofit2.kotlinx.serialization.converter)
 
     val fragment_version = "1.8.4"
 

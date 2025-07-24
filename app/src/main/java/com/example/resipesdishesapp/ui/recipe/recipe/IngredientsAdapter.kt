@@ -25,16 +25,21 @@ class IngredientsAdapter :
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(ingredient: Ingredient, quantityPortion: Int) {
-            val calculatePortion = ingredient.quantity.toDouble() * quantityPortion
-
-            val newQuantity = if (calculatePortion % 1 == 0.0) {
-                calculatePortion.toInt().toString()
-            } else calculatePortion.toString()
-
             with(binding) {
                 tvIngredient.text = ingredient.description
-                tvQuantity.text = newQuantity
                 tvUnit.text = ingredient.unitOfMeasure
+
+                val quantityText = try {
+                    val quantity = ingredient.quantity.toDouble()
+                    val calculated = quantity * quantityPortion
+                    if (calculated % 1 == 0.0) calculated.toInt().toString()
+                    else calculated.toString()
+                } catch (e: NumberFormatException) {
+
+                    ingredient.quantity
+                }
+
+                tvQuantity.text = quantityText
             }
         }
     }

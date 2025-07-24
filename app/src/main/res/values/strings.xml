@@ -16,4 +16,6 @@
     <string name="icon_fovourites">Иконка избранное</string>
     <string name="image_favorites">Изображение избранное</string>
     <string name="text_empty_favorites">Вы еще не добавили ни одного рецепта в избранное</string>
+    <string name="errorData">Ошибка получения данных</string>
+    <string name="errorConnect">Ошибка соединения</string>
 </resources>

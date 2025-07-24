@@ -6,27 +6,57 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.resipesdishesapp.data.KeysConstant
-import com.example.resipesdishesapp.data.STUB
+import com.example.resipesdishesapp.data.NetworkResult
+import com.example.resipesdishesapp.data.RecipesRepository
 import com.example.resipesdishesapp.model.Recipe
 
 class FavoritesViewModel(application: Application) : AndroidViewModel(application) {
 
     private val _favoritesState = MutableLiveData(FavoritesState())
     val favoritesState: LiveData<FavoritesState> get() = _favoritesState
+    private val recipesRepository = RecipesRepository()
 
     data class FavoritesState(
         val favoriteRecipes: List<Recipe> = emptyList(),
-        val isEmpty: Boolean = true
+        val isEmpty: Boolean = true,
+        val errorId: Int? = null
     )
 
     fun loadFavorites() {
-        val favoriteIds = getFavorites().map { it.toInt() }.toSet()
-        val recipes = STUB.getRecipesByIds(favoriteIds)
+        val favoriteIds = getFavorites().mapNotNull { it.toIntOrNull() }.toSet()
 
-        _favoritesState.value = FavoritesState(
-            favoriteRecipes = recipes,
-            isEmpty = recipes.isEmpty()
-        )
+        if (favoriteIds.isEmpty()) {
+            _favoritesState.value = FavoritesState(
+                favoriteRecipes = emptyList(),
+                isEmpty = true,
+                errorId = null
+            )
+            return
+        }
+
+        recipesRepository.getListRecipeId(favoriteIds) { result ->
+            when (result) {
+                is NetworkResult.Success -> {
+                    _favoritesState.postValue(
+                        FavoritesState(
+                            favoriteRecipes = result.data,
+                            isEmpty = result.data.isEmpty(),
+                            errorId = null
+                        )
+                    )
+                }
+
+                is NetworkResult.Error -> {
+                    _favoritesState.postValue(
+                        FavoritesState(
+                            favoriteRecipes = emptyList(),
+                            isEmpty = true,
+                            errorId = result.errorId
+                        )
+                    )
+                }
+            }
+        }
     }
 
     private fun getFavorites(): Set<String> {

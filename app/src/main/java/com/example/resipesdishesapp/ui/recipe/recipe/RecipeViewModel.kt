@@ -3,50 +3,55 @@ package com.example.resipesdishesapp.ui.recipe.recipe
 import android.app.Application
 import android.content.Context
 import android.graphics.drawable.Drawable
-import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.resipesdishesapp.data.KeysConstant
-import com.example.resipesdishesapp.data.STUB
+import com.example.resipesdishesapp.data.NetworkResult
+import com.example.resipesdishesapp.data.RecipesRepository
 import com.example.resipesdishesapp.model.Recipe
 
 class RecipeViewModel(application: Application) : AndroidViewModel(application) {
 
     private val _recipeState = MutableLiveData(RecipeState())
     val recipeState: LiveData<RecipeState> get() = _recipeState
+    private val recipesRepository = RecipesRepository()
 
     data class RecipeState(
         val recipe: Recipe? = null,
         val recipeImage: Drawable? = null,
         val portion: Int = 1,
-        val isFavorite: Boolean = false
+        val isFavorite: Boolean = false,
+        val errorId: Int? = null
     )
 
     fun loadRecipe(recipeId: Int) {
-        // TODO("Load from network")
-        val recipe = STUB.getRecipeById(recipeId)
         val favorites = getFavorites()
         val isFavorite = favorites.contains(recipeId.toString())
 
-        val drawable = try {
-            val inputStream = recipe.imageUrlHeader?.let {
-                getApplication<Application>().assets.open(
-                    it
-                )
-            }
-            Drawable.createFromStream(inputStream, null)
-        } catch (e: Exception) {
-            Log.e("RecipeViewModel", "Error loading image", e)
-            null
-        }
+        recipesRepository.getRecipeById(recipeId) { result ->
+            when (result) {
+                is NetworkResult.Success -> {
+                    _recipeState.postValue(
+                        RecipeState(
+                            recipe = result.data,
+                            recipeImage = null,
+                            isFavorite = isFavorite,
+                            portion = 1
+                        )
+                    )
+                }
 
-        _recipeState.value = _recipeState.value?.copy(
-            recipe = recipe,
-            isFavorite = isFavorite,
-            portion = 1,
-            recipeImage = drawable
-        )
+                is NetworkResult.Error -> {
+                    _recipeState.postValue(
+                        RecipeState(
+
+                            errorId = result.errorId
+                        )
+                    )
+                }
+            }
+        }
     }
 
     fun onFavoritesClicked() {

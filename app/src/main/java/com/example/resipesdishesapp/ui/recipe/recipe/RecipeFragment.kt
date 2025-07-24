@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.SeekBar
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
@@ -79,6 +80,10 @@ class RecipeFragment : Fragment() {
 
                 recipeBinding.tvQuantityPortion.text = state.portion.toString()
                 recipeBinding.sbQuantityPortion.progress = state.portion
+
+                state.errorId?.let { resId ->
+                    Toast.makeText(requireContext(), resId, Toast.LENGTH_SHORT).show()
+                }
             }
         }
 
