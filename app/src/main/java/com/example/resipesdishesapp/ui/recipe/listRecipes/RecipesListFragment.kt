@@ -8,6 +8,8 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.bumptech.glide.Glide
+import com.example.resipesdishesapp.R
 import com.example.resipesdishesapp.databinding.FragmentRecipesListBinding
 
 class RecipesListFragment : Fragment() {
@@ -52,7 +54,15 @@ class RecipesListFragment : Fragment() {
 
         viewModel.recipesListState.observe(viewLifecycleOwner) { state ->
             state.categoryName?.let { recipesBinding.tvTitle.text = it }
-            recipesBinding.ivCategoryImage.setImageDrawable(state.categoryImage)
+
+            state.categoryImageUrl?.let { imageUrl ->
+                Glide.with(requireContext())
+                    .load(imageUrl)
+                    .placeholder(R.drawable.img_placeholder)
+                    .error(R.drawable.img_error)
+                    .into(recipesBinding.ivCategoryImage)
+            }
+
             recipesAdapter.updateRecipes(state.recipes)
 
             state.errorId?.let { resId ->

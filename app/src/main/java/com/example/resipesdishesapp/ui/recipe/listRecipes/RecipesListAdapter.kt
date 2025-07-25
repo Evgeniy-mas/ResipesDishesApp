@@ -1,10 +1,9 @@
 package com.example.resipesdishesapp.ui.recipe.listRecipes
 
-import android.graphics.drawable.Drawable
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.resipesdishesapp.R
 import com.example.resipesdishesapp.databinding.ItemRecipesBinding
 import com.example.resipesdishesapp.model.Recipe
@@ -39,20 +38,11 @@ class RecipesListAdapter(private var dataSet: List<Recipe>) :
                     recipes.title
                 )
 
-                val drawable =
-                    try {
-                        Drawable.createFromStream(
-                            root.context.assets.open(recipes.imageUrl),
-                            null
-                        )
-                    } catch (e: Exception) {
-                        val errorMessage = root.context.getString(
-                            R.string.drawable_error
-                        )
-                        Log.e("!!!", "$errorMessage ${recipes.imageUrl}", e)
-                        null
-                    }
-                ivRecipeImage.setImageDrawable(drawable)
+                Glide.with(root.context)
+                    .load(recipes.imageUrl)
+                    .placeholder(R.drawable.img_placeholder)
+                    .error(R.drawable.img_error)
+                    .into(ivRecipeImage)
             }
         }
     }

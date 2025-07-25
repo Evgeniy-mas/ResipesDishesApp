@@ -16,7 +16,8 @@ class CategoriesListViewModel(application: Application) : AndroidViewModel(appli
 
     data class CategoriesListState(
         val categories: List<Category> = emptyList(),
-        val errorId: Int? = null
+        val errorId: Int? = null,
+        val imageUrl: String = "https://recipes.androidsprint.ru/api"
     )
 
     fun loadCategories() {
