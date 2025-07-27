@@ -15,6 +15,7 @@ class FavoritesViewModel(application: Application) : AndroidViewModel(applicatio
     private val _favoritesState = MutableLiveData(FavoritesState())
     val favoritesState: LiveData<FavoritesState> get() = _favoritesState
     private val recipesRepository = RecipesRepository()
+    private val recipesImageUrl = "https://recipes.androidsprint.ru/api/images/"
 
     data class FavoritesState(
         val favoriteRecipes: List<Recipe> = emptyList(),
@@ -37,10 +38,13 @@ class FavoritesViewModel(application: Application) : AndroidViewModel(applicatio
         recipesRepository.getListRecipeId(favoriteIds) { result ->
             when (result) {
                 is NetworkResult.Success -> {
+                    val recipesUrl = result.data.map { recipe ->
+                        recipe.copy(imageUrl = "$recipesImageUrl${recipe.imageUrl}")
+                    }
                     _favoritesState.postValue(
                         FavoritesState(
-                            favoriteRecipes = result.data,
-                            isEmpty = result.data.isEmpty(),
+                            favoriteRecipes = recipesUrl,
+                            isEmpty = recipesUrl.isEmpty(),
                             errorId = null
                         )
                     )

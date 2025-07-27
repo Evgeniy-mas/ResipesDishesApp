@@ -52,7 +52,7 @@ class CategoriesListFragment : Fragment() {
         categoriesBinding.rvCategories.adapter = categoriesAdapter
 
         viewModel.categoriesState.observe(viewLifecycleOwner) { state ->
-            categoriesAdapter.updateCategories(state.categories)
+            categoriesAdapter.updateCategories(state.categories, state.imageUrl)
 
             state.errorId?.let { resId ->
                 Toast.makeText(requireContext(), resId, Toast.LENGTH_SHORT).show()

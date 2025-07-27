@@ -12,6 +12,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.resipesdishesapp.R
 import com.example.resipesdishesapp.databinding.FragmentRecipeBinding
 import com.google.android.material.divider.MaterialDividerItemDecoration
@@ -66,7 +67,13 @@ class RecipeFragment : Fragment() {
 
                 recipeBinding.tvTitle.text = recipe.title
 
-                recipeBinding.ivRecipeImage.setImageDrawable(state.recipeImage)
+                state.recipeImage?.let { imageUrl ->
+                    Glide.with(this)
+                        .load(imageUrl)
+                        .placeholder(R.drawable.img_placeholder)
+                        .error(R.drawable.img_error)
+                        .into(recipeBinding.ivRecipeImage)
+                }
 
                 recipeBinding.ibAddToFavourites.setImageResource(
                     if (state.isFavorite) R.drawable.ic_heart_favourites

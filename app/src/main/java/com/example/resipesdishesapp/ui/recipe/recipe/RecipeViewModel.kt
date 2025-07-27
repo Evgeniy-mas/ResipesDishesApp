@@ -2,7 +2,6 @@ package com.example.resipesdishesapp.ui.recipe.recipe
 
 import android.app.Application
 import android.content.Context
-import android.graphics.drawable.Drawable
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -16,10 +15,11 @@ class RecipeViewModel(application: Application) : AndroidViewModel(application) 
     private val _recipeState = MutableLiveData(RecipeState())
     val recipeState: LiveData<RecipeState> get() = _recipeState
     private val recipesRepository = RecipesRepository()
+    private val recipesImageUrl = "https://recipes.androidsprint.ru/api/images/"
 
     data class RecipeState(
         val recipe: Recipe? = null,
-        val recipeImage: Drawable? = null,
+        val recipeImage: String? = null,
         val portion: Int = 1,
         val isFavorite: Boolean = false,
         val errorId: Int? = null
@@ -32,10 +32,13 @@ class RecipeViewModel(application: Application) : AndroidViewModel(application) 
         recipesRepository.getRecipeById(recipeId) { result ->
             when (result) {
                 is NetworkResult.Success -> {
+                    val recipeUrl = result.data.copy(
+                        imageUrl = "$recipesImageUrl${result.data.imageUrl}"
+                    )
                     _recipeState.postValue(
                         RecipeState(
                             recipe = result.data,
-                            recipeImage = null,
+                            recipeImage = recipeUrl.imageUrl,
                             isFavorite = isFavorite,
                             portion = 1
                         )

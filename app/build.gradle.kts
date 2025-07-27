@@ -43,7 +43,9 @@ android {
 }
 
 dependencies {
-    
+    implementation (libs.glide)
+    annotationProcessor (libs.compiler)
+    implementation (libs.okhttp3.integration)
     implementation(libs.logging.interceptor)
     implementation(libs.okhttp)
     implementation (libs.google.gson)
