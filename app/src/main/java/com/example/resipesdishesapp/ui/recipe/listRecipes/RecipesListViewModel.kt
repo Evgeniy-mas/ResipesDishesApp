@@ -4,9 +4,11 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import com.example.resipesdishesapp.data.NetworkResult
 import com.example.resipesdishesapp.data.RecipesRepository
 import com.example.resipesdishesapp.model.Recipe
+import kotlinx.coroutines.launch
 
 class RecipesListViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -24,7 +26,7 @@ class RecipesListViewModel(application: Application) : AndroidViewModel(applicat
     )
 
     fun loadData(categoryId: Int, categoryName: String?, categoryImageName: String?) {
-        
+
         val fullImageUrl = if (categoryImageName != null) {
             "$recipesImageUrl$categoryImageName"
         } else {
@@ -37,8 +39,8 @@ class RecipesListViewModel(application: Application) : AndroidViewModel(applicat
             recipes = emptyList()
         )
 
-        recipesRepository.getRecipesCategoryId(categoryId) { result ->
-            when (result) {
+        viewModelScope.launch {
+            when (val result = recipesRepository.getRecipesCategoryId(categoryId)) {
                 is NetworkResult.Success -> {
                     _recipesListState.postValue(
                         RecipesListState(

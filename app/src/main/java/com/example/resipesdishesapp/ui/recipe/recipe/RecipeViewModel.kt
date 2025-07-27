@@ -5,10 +5,13 @@ import android.content.Context
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import com.example.resipesdishesapp.data.KeysConstant
 import com.example.resipesdishesapp.data.NetworkResult
 import com.example.resipesdishesapp.data.RecipesRepository
 import com.example.resipesdishesapp.model.Recipe
+import kotlinx.coroutines.launch
+import androidx.core.content.edit
 
 class RecipeViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -29,8 +32,8 @@ class RecipeViewModel(application: Application) : AndroidViewModel(application) 
         val favorites = getFavorites()
         val isFavorite = favorites.contains(recipeId.toString())
 
-        recipesRepository.getRecipeById(recipeId) { result ->
-            when (result) {
+        viewModelScope.launch {
+            when (val result = recipesRepository.getRecipeById(recipeId)) {
                 is NetworkResult.Success -> {
                     val recipeUrl = result.data.copy(
                         imageUrl = "$recipesImageUrl${result.data.imageUrl}"
@@ -48,7 +51,6 @@ class RecipeViewModel(application: Application) : AndroidViewModel(application) 
                 is NetworkResult.Error -> {
                     _recipeState.postValue(
                         RecipeState(
-
                             errorId = result.errorId
                         )
                     )
@@ -56,6 +58,7 @@ class RecipeViewModel(application: Application) : AndroidViewModel(application) 
             }
         }
     }
+
 
     fun onFavoritesClicked() {
         _recipeState.value?.let { currentState ->
@@ -68,7 +71,6 @@ class RecipeViewModel(application: Application) : AndroidViewModel(application) 
                 } else {
                     favorites.remove(recipeId)
                 }
-
                 saveFavorites(favorites)
                 _recipeState.value = currentState.copy(isFavorite = isFavorite)
             }
@@ -81,9 +83,9 @@ class RecipeViewModel(application: Application) : AndroidViewModel(application) 
                 KeysConstant.PREFS_SHARED,
                 Context.MODE_PRIVATE
             )
-        sharedPrefs.edit()
-            .putStringSet(KeysConstant.FAVORITES_KEY, idRecipe)
-            .apply()
+        sharedPrefs.edit {
+            putStringSet(KeysConstant.FAVORITES_KEY, idRecipe)
+        }
     }
 
     private fun getFavorites(): MutableSet<String> {
