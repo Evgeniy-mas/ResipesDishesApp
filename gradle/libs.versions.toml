@@ -27,8 +27,11 @@ okhttp3Integration = "4.16.0"
 retrofit = "3.1.0-SNAPSHOT"
 retrofit2KotlinxSerializationConverter = "1.0.0"
 retrofitVersion = "2.9.0"
+roomCompiler = "2.7.2"
 
 [libraries]
+androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "roomCompiler" }
+androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "roomCompiler" }
 kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlinx-coroutines" }
 androidx-cardview = { module = "androidx.cardview:cardview", version.ref = "cardview" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
