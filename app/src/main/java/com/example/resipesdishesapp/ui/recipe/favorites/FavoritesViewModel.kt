@@ -5,10 +5,12 @@ import android.content.Context
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import com.example.resipesdishesapp.data.KeysConstant
 import com.example.resipesdishesapp.data.NetworkResult
 import com.example.resipesdishesapp.data.RecipesRepository
 import com.example.resipesdishesapp.model.Recipe
+import kotlinx.coroutines.launch
 
 class FavoritesViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -35,8 +37,8 @@ class FavoritesViewModel(application: Application) : AndroidViewModel(applicatio
             return
         }
 
-        recipesRepository.getListRecipeId(favoriteIds) { result ->
-            when (result) {
+        viewModelScope.launch {
+            when (val result = recipesRepository.getListRecipeId(favoriteIds)) {
                 is NetworkResult.Success -> {
                     val recipesUrl = result.data.map { recipe ->
                         recipe.copy(imageUrl = "$recipesImageUrl${recipe.imageUrl}")

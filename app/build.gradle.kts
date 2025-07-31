@@ -4,6 +4,7 @@ plugins {
     id("kotlin-parcelize")
     id("androidx.navigation.safeargs.kotlin")
     kotlin("plugin.serialization") version "2.1.0"
+
 }
 
 android {
@@ -43,6 +44,9 @@ android {
 }
 
 dependencies {
+    implementation(libs.kotlinx.coroutines.android)
+    implementation(libs.kotlinx.coroutines.core)
+    implementation(libs.androidx.lifecycle.viewmodel.ktx)
     implementation (libs.glide)
     annotationProcessor (libs.compiler)
     implementation (libs.okhttp3.integration)
@@ -64,6 +68,7 @@ dependencies {
     implementation(libs.androidx.navigation.compose)
     implementation(libs.retrofit.v290)
     implementation(libs.retrofit2.kotlinx.serialization.converter)
+   
 
     val fragment_version = "1.8.4"
 
