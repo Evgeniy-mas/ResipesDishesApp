@@ -48,8 +48,8 @@ class CategoriesListViewModel(application: Application) : AndroidViewModel(appli
                 is NetworkResult.Error -> {
                     _categoriesState.postValue(
                         CategoriesListState(
-                            categories = emptyList(),
-                            errorId = result.errorId
+                            categories = cachedCategories.takeIf { it.isNotEmpty() } ?: emptyList(),
+                            errorId = if (cachedCategories.isEmpty()) result.errorId else null
                         )
                     )
                 }

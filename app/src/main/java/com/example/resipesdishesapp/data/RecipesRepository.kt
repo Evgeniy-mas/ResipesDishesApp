@@ -12,17 +12,16 @@ import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
 import retrofit2.Retrofit
 
-class RecipesRepository(val context: Context? = null) {
+class RecipesRepository(val context: Context) {
 
-    private val db = context?.let {
-        Room.databaseBuilder(
-            it.applicationContext,
-            AppDatabase::class.java,
-            "database-categories"
-        ).build()
-    }
+    private val db = Room.databaseBuilder(
+        context.applicationContext,
+        AppDatabase::class.java,
+        "database-categories"
+    ).build()
 
-    private val categoriesDao = db?.categoriesDao()
+
+    private val categoriesDao = db.categoriesDao()
 
     private val retrofit by lazy {
         val contentType = "application/json".toMediaType()
@@ -81,10 +80,10 @@ class RecipesRepository(val context: Context? = null) {
     }
 
     suspend fun getCategoriesFromCache(): List<Category> {
-        return categoriesDao?.getAll() ?: emptyList()
+        return categoriesDao.getAll()
     }
 
     suspend fun saveCategoriesToCache(categories: List<Category>) {
-        categoriesDao?.insertAll(categories)
+        categoriesDao.insertAll(categories)
     }
 }

@@ -14,7 +14,7 @@ class RecipesListViewModel(application: Application) : AndroidViewModel(applicat
 
     private val _recipesListState = MutableLiveData(RecipesListState())
     val recipesListState: LiveData<RecipesListState> get() = _recipesListState
-    private val recipesRepository = RecipesRepository()
+    private val recipesRepository = RecipesRepository(application.applicationContext)
 
     private val recipesImageUrl = "https://recipes.androidsprint.ru/api/images/"
 
