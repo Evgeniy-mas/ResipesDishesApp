@@ -16,7 +16,7 @@ class FavoritesViewModel(application: Application) : AndroidViewModel(applicatio
 
     private val _favoritesState = MutableLiveData(FavoritesState())
     val favoritesState: LiveData<FavoritesState> get() = _favoritesState
-    private val recipesRepository = RecipesRepository()
+    private val recipesRepository = RecipesRepository(application.applicationContext)
     private val recipesImageUrl = "https://recipes.androidsprint.ru/api/images/"
 
     data class FavoritesState(
