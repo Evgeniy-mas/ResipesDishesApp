@@ -24,7 +24,8 @@ data class Recipe(
             """.trimIndent()),
     @ColumnInfo ("recipe_imageUrl") val imageUrl: String,
     @ColumnInfo ("recipe_imageUrlHeader") val imageUrlHeader: String? = null,
-    @ColumnInfo val categoryId: Int? = null
+    @ColumnInfo val categoryId: Int? = null,
+    @ColumnInfo val isFavorite: Boolean = false
 ):Parcelable
 
 

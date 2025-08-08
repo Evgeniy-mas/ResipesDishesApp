@@ -1,13 +1,11 @@
 package com.example.resipesdishesapp.ui.recipe.favorites
 
 import android.app.Application
-import android.content.Context
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.example.resipesdishesapp.data.KeysConstant
-import com.example.resipesdishesapp.data.NetworkResult
+import com.example.resipesdishesapp.R
 import com.example.resipesdishesapp.data.RecipesRepository
 import com.example.resipesdishesapp.model.Recipe
 import kotlinx.coroutines.launch
@@ -26,50 +24,30 @@ class FavoritesViewModel(application: Application) : AndroidViewModel(applicatio
     )
 
     fun loadFavorites() {
-        val favoriteIds = getFavorites().mapNotNull { it.toIntOrNull() }.toSet()
-
-        if (favoriteIds.isEmpty()) {
-            _favoritesState.value = FavoritesState(
-                favoriteRecipes = emptyList(),
-                isEmpty = true,
-                errorId = null
-            )
-            return
-        }
-
         viewModelScope.launch {
-            when (val result = recipesRepository.getListRecipeId(favoriteIds)) {
-                is NetworkResult.Success -> {
-                    val recipesUrl = result.data.map { recipe ->
-                        recipe.copy(imageUrl = "$recipesImageUrl${recipe.imageUrl}")
-                    }
-                    _favoritesState.postValue(
-                        FavoritesState(
-                            favoriteRecipes = recipesUrl,
-                            isEmpty = recipesUrl.isEmpty(),
-                            errorId = null
-                        )
-                    )
+            try {
+                val favorites = recipesRepository.getFavoriteRecipes()
+
+                val recipesWithUrls = favorites.map {
+                    it.copy(imageUrl = "$recipesImageUrl${it.imageUrl}")
                 }
 
-                is NetworkResult.Error -> {
-                    _favoritesState.postValue(
-                        FavoritesState(
-                            favoriteRecipes = emptyList(),
-                            isEmpty = true,
-                            errorId = result.errorId
-                        )
+                _favoritesState.postValue(
+                    FavoritesState(
+                        favoriteRecipes = recipesWithUrls,
+                        isEmpty = favorites.isEmpty(),
+                        errorId = null
                     )
-                }
+                )
+            } catch (e: Exception) {
+                _favoritesState.postValue(
+                    FavoritesState(
+                        favoriteRecipes = emptyList(),
+                        isEmpty = true,
+                        errorId = R.string.error_loading_favorites
+                    )
+                )
             }
         }
-    }
-
-    private fun getFavorites(): Set<String> {
-        val sharedPrefs = getApplication<Application>().getSharedPreferences(
-            KeysConstant.PREFS_SHARED,
-            Context.MODE_PRIVATE
-        )
-        return sharedPrefs.getStringSet(KeysConstant.FAVORITES_KEY, emptySet()) ?: emptySet()
     }
 }

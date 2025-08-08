@@ -18,4 +18,5 @@
     <string name="text_empty_favorites">Вы еще не добавили ни одного рецепта в избранное</string>
     <string name="errorData">Ошибка получения данных</string>
     <string name="errorConnect">Ошибка соединения</string>
+    <string name="error_loading_favorites">Ошибка загрузки избранных рецептов</string>
 </resources>

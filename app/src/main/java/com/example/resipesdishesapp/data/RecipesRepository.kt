@@ -56,18 +56,7 @@ class RecipesRepository(val context: Context) {
             try {
                 val recipeResponse = service.getRecipeById(recipeId)
                 NetworkResult.Success(recipeResponse)
-            } catch (e: Exception) {
-                NetworkResult.Error(R.string.errorConnect)
-            }
-        }
-    }
 
-    suspend fun getListRecipeId(recipesId: Set<Int>): NetworkResult<List<Recipe>> {
-        return withContext(Dispatchers.IO) {
-            try {
-                val idsString = recipesId.joinToString(",")
-                val recipesResponse = service.getListRecipeId(idsString)
-                NetworkResult.Success(recipesResponse)
             } catch (e: Exception) {
                 NetworkResult.Error(R.string.errorConnect)
             }
@@ -88,5 +77,13 @@ class RecipesRepository(val context: Context) {
 
     suspend fun saveRecipesToCache(recipes: List<Recipe>) {
         recipesDao.insertAll(recipes)
+    }
+
+    suspend fun setFavorite(recipeId: Int, isFavorite: Boolean) {
+        recipesDao.setFavorite(recipeId, isFavorite)
+    }
+
+    suspend fun getFavoriteRecipes(): List<Recipe> {
+        return recipesDao.getFavorites()
     }
 }
