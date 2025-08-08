@@ -1,7 +1,7 @@
 package com.example.resipesdishesapp.data
 
 import android.content.Context
-import androidx.room.Room
+
 import com.example.resipesdishesapp.R
 import com.example.resipesdishesapp.model.Category
 import com.example.resipesdishesapp.model.Recipe
@@ -14,14 +14,9 @@ import retrofit2.Retrofit
 
 class RecipesRepository(val context: Context) {
 
-    private val db = Room.databaseBuilder(
-        context.applicationContext,
-        AppDatabase::class.java,
-        "database-categories"
-    ).build()
-
-
+    private val db = AppDatabase.getDatabase(context.applicationContext)
     private val categoriesDao = db.categoriesDao()
+    private val recipesDao = db.RecipesDao()
 
     private val retrofit by lazy {
         val contentType = "application/json".toMediaType()
@@ -85,5 +80,13 @@ class RecipesRepository(val context: Context) {
 
     suspend fun saveCategoriesToCache(categories: List<Category>) {
         categoriesDao.insertAll(categories)
+    }
+
+    suspend fun getRecipesFromCache(categoryId: Int): List<Recipe> {
+        return recipesDao.getByCategoryId(categoryId)
+    }
+
+    suspend fun saveRecipesToCache(recipes: List<Recipe>) {
+        recipesDao.insertAll(recipes)
     }
 }

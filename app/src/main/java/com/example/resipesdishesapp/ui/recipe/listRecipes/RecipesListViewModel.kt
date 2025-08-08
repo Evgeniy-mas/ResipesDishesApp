@@ -40,15 +40,38 @@ class RecipesListViewModel(application: Application) : AndroidViewModel(applicat
         )
 
         viewModelScope.launch {
+            val cachedRecipes = recipesRepository.getRecipesFromCache(categoryId)
+            if (cachedRecipes.isNotEmpty()) {
+                _recipesListState.postValue(
+                    RecipesListState(
+                        categoryName = categoryName,
+                        categoryImageUrl = fullImageUrl,
+                        recipes = cachedRecipes.map {
+                            it.copy(imageUrl = "$recipesImageUrl${it.imageUrl}")
+                        }
+                    )
+                )
+            }
+
             when (val result = recipesRepository.getRecipesCategoryId(categoryId)) {
                 is NetworkResult.Success -> {
+                    val recipesWithCategory = result.data.map {
+                        it.copy(categoryId = categoryId)
+                    }
+                    recipesRepository.saveRecipesToCache(recipesWithCategory)
+
+                    val recipesUrl = result.data.map { recipe ->
+                        recipe.copy(
+                            imageUrl = "$recipesImageUrl${recipe.imageUrl}",
+                            categoryId = categoryId
+                        )
+                    }
+
                     _recipesListState.postValue(
                         RecipesListState(
                             categoryName = categoryName,
                             categoryImageUrl = fullImageUrl,
-                            recipes = result.data.map {
-                                it.copy(imageUrl = "$recipesImageUrl${it.imageUrl}")
-                            }
+                            recipes = recipesUrl
                         )
                     )
                 }
@@ -58,8 +81,10 @@ class RecipesListViewModel(application: Application) : AndroidViewModel(applicat
                         RecipesListState(
                             categoryName = categoryName,
                             categoryImageUrl = fullImageUrl,
-                            recipes = emptyList(),
-                            errorId = result.errorId
+                            recipes = cachedRecipes.takeIf { it.isNotEmpty() }?.map {
+                                it.copy(imageUrl = "$recipesImageUrl${it.imageUrl}")
+                            } ?: emptyList(),
+                            errorId = if (cachedRecipes.isEmpty()) result.errorId else null
                         )
                     )
                 }
