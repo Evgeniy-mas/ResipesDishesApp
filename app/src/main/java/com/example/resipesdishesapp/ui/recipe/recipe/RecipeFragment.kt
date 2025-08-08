@@ -49,7 +49,6 @@ class RecipeFragment : Fragment() {
     }
 
     private fun initAdapters() {
-
         ingredientsAdapter = IngredientsAdapter()
         methodAdapter = MethodAdapter()
 
@@ -74,6 +73,11 @@ class RecipeFragment : Fragment() {
                         .error(R.drawable.img_error)
                         .into(recipeBinding.ivRecipeImage)
                 }
+
+                recipeBinding.ibAddToFavourites.setImageResource(
+                    if (state.isFavorite) R.drawable.ic_heart_favourites
+                    else R.drawable.ic_heart_favourites_empty
+                )
 
                 recipeBinding.ibAddToFavourites.setImageResource(
                     if (state.isFavorite) R.drawable.ic_heart_favourites

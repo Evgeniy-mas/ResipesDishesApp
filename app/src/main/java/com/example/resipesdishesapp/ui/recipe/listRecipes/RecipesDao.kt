@@ -16,4 +16,10 @@ interface RecipesDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAll(recipes: List<Recipe>)
+
+    @Query("UPDATE recipe SET isFavorite = :isFavorite WHERE id = :recipeId")
+    suspend fun setFavorite(recipeId: Int, isFavorite: Boolean)
+
+    @Query("SELECT * FROM recipe WHERE isFavorite = 1")
+    suspend fun getFavorites(): List<Recipe>
 }

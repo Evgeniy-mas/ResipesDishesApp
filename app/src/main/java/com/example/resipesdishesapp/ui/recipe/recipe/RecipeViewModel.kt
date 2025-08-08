@@ -1,17 +1,15 @@
 package com.example.resipesdishesapp.ui.recipe.recipe
 
 import android.app.Application
-import android.content.Context
+
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.example.resipesdishesapp.data.KeysConstant
 import com.example.resipesdishesapp.data.NetworkResult
 import com.example.resipesdishesapp.data.RecipesRepository
 import com.example.resipesdishesapp.model.Recipe
 import kotlinx.coroutines.launch
-import androidx.core.content.edit
 
 class RecipeViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -29,12 +27,11 @@ class RecipeViewModel(application: Application) : AndroidViewModel(application) 
     )
 
     fun loadRecipe(recipeId: Int) {
-        val favorites = getFavorites()
-        val isFavorite = favorites.contains(recipeId.toString())
 
         viewModelScope.launch {
             when (val result = recipesRepository.getRecipeById(recipeId)) {
                 is NetworkResult.Success -> {
+                    val isFavorite = result.data.isFavorite
                     val recipeUrl = result.data.copy(
                         imageUrl = "$recipesImageUrl${result.data.imageUrl}"
                     )
@@ -59,41 +56,16 @@ class RecipeViewModel(application: Application) : AndroidViewModel(application) 
         }
     }
 
-
     fun onFavoritesClicked() {
         _recipeState.value?.let { currentState ->
-            currentState.recipe?.id?.toString()?.let { recipeId ->
-                val favorites = getFavorites().toMutableSet()
-                val isFavorite = !currentState.isFavorite
-
-                if (isFavorite) {
-                    favorites.add(recipeId)
-                } else {
-                    favorites.remove(recipeId)
+            currentState.recipe?.let { recipe ->
+                viewModelScope.launch {
+                    val newFavoriteStatus = !currentState.isFavorite
+                    recipesRepository.setFavorite(recipe.id, newFavoriteStatus)
+                    _recipeState.value = currentState.copy(isFavorite = newFavoriteStatus)
                 }
-                saveFavorites(favorites)
-                _recipeState.value = currentState.copy(isFavorite = isFavorite)
             }
         }
-    }
-
-    private fun saveFavorites(idRecipe: Set<String>) {
-        val sharedPrefs =
-            getApplication<Application>().getSharedPreferences(
-                KeysConstant.PREFS_SHARED,
-                Context.MODE_PRIVATE
-            )
-        sharedPrefs.edit {
-            putStringSet(KeysConstant.FAVORITES_KEY, idRecipe)
-        }
-    }
-
-    private fun getFavorites(): MutableSet<String> {
-        val sharedPrefs = getApplication<Application>().getSharedPreferences(
-            KeysConstant.PREFS_SHARED,
-            Context.MODE_PRIVATE
-        )
-        return sharedPrefs.getStringSet(KeysConstant.FAVORITES_KEY, HashSet()) ?: HashSet()
     }
 
     fun updatePortion(portion: Int) {
