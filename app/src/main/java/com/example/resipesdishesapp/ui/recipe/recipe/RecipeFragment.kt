@@ -9,6 +9,7 @@ import android.widget.SeekBar
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -60,10 +61,9 @@ class RecipeFragment : Fragment() {
     }
 
     private fun initUI() {
-
         viewModel.recipeState.observe(viewLifecycleOwner) { state ->
             state.recipe?.let { recipe ->
-
+                updateFavoriteIcon(state.isFavorite)
                 recipeBinding.tvTitle.text = recipe.title
 
                 state.recipeImage?.let { imageUrl ->
@@ -73,16 +73,6 @@ class RecipeFragment : Fragment() {
                         .error(R.drawable.img_error)
                         .into(recipeBinding.ivRecipeImage)
                 }
-
-                recipeBinding.ibAddToFavourites.setImageResource(
-                    if (state.isFavorite) R.drawable.ic_heart_favourites
-                    else R.drawable.ic_heart_favourites_empty
-                )
-
-                recipeBinding.ibAddToFavourites.setImageResource(
-                    if (state.isFavorite) R.drawable.ic_heart_favourites
-                    else R.drawable.ic_heart_favourites_empty
-                )
 
                 ingredientsAdapter.dataSet = recipe.ingredients
                 ingredientsAdapter.quantityPortion = state.portion
@@ -107,6 +97,21 @@ class RecipeFragment : Fragment() {
                 recipeBinding.tvQuantityPortion.text = "$progress"
                 viewModel.updatePortion(progress)
             }
+        )
+
+        viewModel.favoriteUpdated.observe(viewLifecycleOwner) { update ->
+            if (update) {
+                findNavController().previousBackStackEntry?.savedStateHandle?.set(
+                    "favorite_updated", true
+                )
+            }
+        }
+    }
+
+    private fun updateFavoriteIcon(isFavorite: Boolean) {
+        recipeBinding.ibAddToFavourites.setImageResource(
+            if (isFavorite) R.drawable.ic_heart_favourites
+            else R.drawable.ic_heart_favourites_empty
         )
     }
 

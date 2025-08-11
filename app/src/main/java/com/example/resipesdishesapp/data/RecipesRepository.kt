@@ -51,16 +51,30 @@ class RecipesRepository(val context: Context) {
         }
     }
 
+
     suspend fun getRecipeById(recipeId: Int): NetworkResult<Recipe> {
         return withContext(Dispatchers.IO) {
             try {
-                val recipeResponse = service.getRecipeById(recipeId)
-                NetworkResult.Success(recipeResponse)
+                val networkRecipe = service.getRecipeById(recipeId)
+                val isFavorite = recipesDao.isFavorite(recipeId)
+                val combinedRecipe = networkRecipe.copy(isFavorite = isFavorite)
+                recipesDao.insert(combinedRecipe)
 
+                NetworkResult.Success(combinedRecipe)
             } catch (e: Exception) {
-                NetworkResult.Error(R.string.errorConnect)
+
+                val localRecipe = recipesDao.getById(recipeId)
+                if (localRecipe != null) {
+                    NetworkResult.Success(localRecipe)
+                } else {
+                    NetworkResult.Error(R.string.errorConnect)
+                }
             }
         }
+    }
+
+    suspend fun isFavorite(recipeId: Int): Boolean = withContext(Dispatchers.IO) {
+        recipesDao.isFavorite(recipeId)
     }
 
     suspend fun getCategoriesFromCache(): List<Category> {

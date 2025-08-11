@@ -31,8 +31,20 @@ class FavoritesFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         initRecycler()
         viewModel.loadFavorites()
+
+        val navBackStack = findNavController().currentBackStackEntry
+        val savedStateHandle = navBackStack?.savedStateHandle
+
+        savedStateHandle?.getLiveData<Boolean>("favorite_updated")
+            ?.observe(viewLifecycleOwner) { updated ->
+                if (updated == true) {
+                    viewModel.loadFavorites()
+                    savedStateHandle.remove<Boolean>("favorite_updated")
+                }
+            }
     }
 
     private fun initRecycler() {

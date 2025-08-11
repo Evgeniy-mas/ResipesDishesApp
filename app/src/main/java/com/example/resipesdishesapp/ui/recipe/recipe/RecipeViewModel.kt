@@ -18,6 +18,9 @@ class RecipeViewModel(application: Application) : AndroidViewModel(application) 
     private val recipesRepository = RecipesRepository(application.applicationContext)
     private val recipesImageUrl = "https://recipes.androidsprint.ru/api/images/"
 
+    private val _favoriteUpdated = MutableLiveData<Boolean>()
+    val favoriteUpdated: LiveData<Boolean> get() = _favoriteUpdated
+
     data class RecipeState(
         val recipe: Recipe? = null,
         val recipeImage: String? = null,
@@ -27,19 +30,19 @@ class RecipeViewModel(application: Application) : AndroidViewModel(application) 
     )
 
     fun loadRecipe(recipeId: Int) {
-
         viewModelScope.launch {
             when (val result = recipesRepository.getRecipeById(recipeId)) {
                 is NetworkResult.Success -> {
-                    val isFavorite = result.data.isFavorite
-                    val recipeUrl = result.data.copy(
-                        imageUrl = "$recipesImageUrl${result.data.imageUrl}"
+                    val localFavoriteStatus = recipesRepository.isFavorite(recipeId)
+                    val recipeWithStatus = result.data.copy(isFavorite = localFavoriteStatus)
+                    val recipeUrl = recipeWithStatus.copy(
+                        imageUrl = "$recipesImageUrl${recipeWithStatus.imageUrl}"
                     )
                     _recipeState.postValue(
                         RecipeState(
                             recipe = result.data,
                             recipeImage = recipeUrl.imageUrl,
-                            isFavorite = isFavorite,
+                            isFavorite = localFavoriteStatus,
                             portion = 1
                         )
                     )
@@ -61,8 +64,10 @@ class RecipeViewModel(application: Application) : AndroidViewModel(application) 
             currentState.recipe?.let { recipe ->
                 viewModelScope.launch {
                     val newFavoriteStatus = !currentState.isFavorite
+                    _recipeState.value = currentState.copy(isFavorite = newFavoriteStatus)
                     recipesRepository.setFavorite(recipe.id, newFavoriteStatus)
                     _recipeState.value = currentState.copy(isFavorite = newFavoriteStatus)
+                    _favoriteUpdated.postValue(true)
                 }
             }
         }
