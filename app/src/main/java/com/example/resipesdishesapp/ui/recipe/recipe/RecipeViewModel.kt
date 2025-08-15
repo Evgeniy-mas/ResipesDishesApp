@@ -66,7 +66,6 @@ class RecipeViewModel(application: Application) : AndroidViewModel(application) 
                     val newFavoriteStatus = !currentState.isFavorite
                     _recipeState.value = currentState.copy(isFavorite = newFavoriteStatus)
                     recipesRepository.setFavorite(recipe.id, newFavoriteStatus)
-                    _recipeState.value = currentState.copy(isFavorite = newFavoriteStatus)
                     _favoriteUpdated.postValue(true)
                 }
             }
