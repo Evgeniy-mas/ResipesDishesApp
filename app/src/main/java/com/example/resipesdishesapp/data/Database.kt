@@ -15,7 +15,7 @@ import com.example.resipesdishesapp.ui.category.CategoriesDao
 import com.example.resipesdishesapp.ui.recipe.listRecipes.RecipesDao
 import kotlinx.serialization.json.Json
 
-@Database(entities = [Category::class, Recipe::class], version = 2)
+@Database(entities = [Category::class, Recipe::class], version = 3)
 @TypeConverters(AppDatabase.Converters::class)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun categoriesDao(): CategoriesDao
@@ -25,6 +25,12 @@ abstract class AppDatabase : RoomDatabase() {
         private val MIGRATION_1_2 = object : Migration(1, 2) {
             override fun migrate(db: SupportSQLiteDatabase) {
                 db.execSQL("ALTER TABLE recipe ADD COLUMN categoryId INTEGER NOT NULL DEFAULT 1")
+            }
+        }
+
+        private val MIGRATION_2_3 = object : Migration(2, 3) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL("ALTER TABLE recipe ADD COLUMN isFavorite INTEGER NOT NULL DEFAULT 0") // 0 = false, 1 = true
             }
         }
 
@@ -38,7 +44,7 @@ abstract class AppDatabase : RoomDatabase() {
                     AppDatabase::class.java,
                     "recipes-database"
                 )
-                    .addMigrations(MIGRATION_1_2)
+                    .addMigrations(MIGRATION_1_2, MIGRATION_2_3)
                     .build()
                 INSTANCE = instance
                 instance
