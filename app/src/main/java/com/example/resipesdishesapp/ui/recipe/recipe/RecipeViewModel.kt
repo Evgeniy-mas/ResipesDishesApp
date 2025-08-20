@@ -5,17 +5,18 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.resipesdishesapp.data.NetworkResult
 import com.example.resipesdishesapp.data.RecipesRepository
 import com.example.resipesdishesapp.model.Recipe
 import kotlinx.coroutines.launch
 
-class RecipeViewModel(application: Application) : AndroidViewModel(application) {
+class RecipeViewModel(private val recipesRepository: RecipesRepository) : ViewModel() {
 
     private val _recipeState = MutableLiveData(RecipeState())
     val recipeState: LiveData<RecipeState> get() = _recipeState
-    private val recipesRepository = RecipesRepository(application.applicationContext)
+
     private val recipesImageUrl = "https://recipes.androidsprint.ru/api/images/"
 
     private val _favoriteUpdated = MutableLiveData<Boolean>()

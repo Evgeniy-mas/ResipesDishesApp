@@ -1,20 +1,19 @@
 package com.example.resipesdishesapp.ui.recipe.listRecipes
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.resipesdishesapp.data.NetworkResult
 import com.example.resipesdishesapp.data.RecipesRepository
 import com.example.resipesdishesapp.model.Recipe
 import kotlinx.coroutines.launch
 
-class RecipesListViewModel(application: Application) : AndroidViewModel(application) {
+class RecipesListViewModel(  private val recipesRepository: RecipesRepository) : ViewModel() {
 
     private val _recipesListState = MutableLiveData(RecipesListState())
     val recipesListState: LiveData<RecipesListState> get() = _recipesListState
-    private val recipesRepository = RecipesRepository(application.applicationContext)
+
 
     private val recipesImageUrl = "https://recipes.androidsprint.ru/api/images/"
 

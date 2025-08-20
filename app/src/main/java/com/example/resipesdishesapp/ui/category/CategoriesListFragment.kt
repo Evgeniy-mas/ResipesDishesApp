@@ -6,19 +6,24 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.example.resipesdishesapp.RecipesApplication
 import com.example.resipesdishesapp.databinding.FragmentListCategoriesBinding
 
 class CategoriesListFragment : Fragment() {
-
     private var _categoriesBinding: FragmentListCategoriesBinding? = null
     private val categoriesBinding: FragmentListCategoriesBinding
         get() = _categoriesBinding
             ?: throw IllegalStateException("FragmentListCategoriesBinding must not be null")
 
-    private val viewModel: CategoriesListViewModel by viewModels()
+    private lateinit var viewModel: CategoriesListViewModel
     private lateinit var categoriesAdapter: CategoriesListAdapter
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        val appContainer = (requireActivity().application as RecipesApplication).appContainer
+        viewModel = appContainer.categoriesListViewModelFactory.create()
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
