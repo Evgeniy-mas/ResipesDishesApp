@@ -8,19 +8,19 @@ import android.view.ViewGroup
 import android.widget.SeekBar
 import android.widget.Toast
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.resipesdishesapp.R
+import com.example.resipesdishesapp.RecipesApplication
 import com.example.resipesdishesapp.databinding.FragmentRecipeBinding
 import com.google.android.material.divider.MaterialDividerItemDecoration
 
 class RecipeFragment : Fragment() {
 
-    private val viewModel: RecipeViewModel by viewModels()
+    lateinit var viewModel: RecipeViewModel
 
     private var _recipeBinding: FragmentRecipeBinding? = null
     private val recipeBinding: FragmentRecipeBinding
@@ -31,6 +31,13 @@ class RecipeFragment : Fragment() {
     private lateinit var methodAdapter: MethodAdapter
 
     private val args: RecipeFragmentArgs by navArgs()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        val appContainer = (requireActivity().application as RecipesApplication).appContainer
+        viewModel = appContainer.recipeViewModelFactory.create()
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,

@@ -1,38 +1,26 @@
 package com.example.resipesdishesapp.data
 
-import android.content.Context
+
 
 import com.example.resipesdishesapp.R
 import com.example.resipesdishesapp.model.Category
 import com.example.resipesdishesapp.model.Recipe
-import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
+import com.example.resipesdishesapp.ui.category.CategoriesDao
+import com.example.resipesdishesapp.ui.recipe.listRecipes.RecipesDao
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import kotlinx.serialization.json.Json
-import okhttp3.MediaType.Companion.toMediaType
-import retrofit2.Retrofit
 
-class RecipesRepository(val context: Context) {
-
-    private val db = AppDatabase.getDatabase(context.applicationContext)
-    private val categoriesDao = db.categoriesDao()
-    private val recipesDao = db.RecipesDao()
-
-    private val retrofit by lazy {
-        val contentType = "application/json".toMediaType()
-        Retrofit.Builder()
-            .baseUrl("https://recipes.androidsprint.ru/api/")
-            .addConverterFactory(Json.asConverterFactory(contentType))
-            .build()
-    }
-    private val service by lazy {
-        retrofit.create(RecipeApiService::class.java)
-    }
-
+class RecipesRepository(
+    private val recipesDao: RecipesDao,
+    private val categoriesDao: CategoriesDao,
+    private val recipeApiService: RecipeApiService,
+    private val ioDispatcher: CoroutineDispatcher
+) {
     suspend fun getCategories(): NetworkResult<List<Category>> {
-        return withContext(Dispatchers.IO) {
+        return withContext(ioDispatcher) {
             try {
-                val categoriesResponse = service.getCategories()
+                val categoriesResponse = recipeApiService.getCategories()
                 NetworkResult.Success(categoriesResponse)
             } catch (e: Exception) {
                 NetworkResult.Error(R.string.errorConnect)
@@ -41,9 +29,9 @@ class RecipesRepository(val context: Context) {
     }
 
     suspend fun getRecipesCategoryId(categoryId: Int): NetworkResult<List<Recipe>> {
-        return withContext(Dispatchers.IO) {
+        return withContext(ioDispatcher) {
             try {
-                val recipesResponse = service.getRecipesByCategoryId(categoryId)
+                val recipesResponse = recipeApiService.getRecipesByCategoryId(categoryId)
                 NetworkResult.Success(recipesResponse)
             } catch (e: Exception) {
                 NetworkResult.Error(R.string.errorConnect)
@@ -53,9 +41,9 @@ class RecipesRepository(val context: Context) {
 
 
     suspend fun getRecipeById(recipeId: Int): NetworkResult<Recipe> {
-        return withContext(Dispatchers.IO) {
+        return withContext(ioDispatcher) {
             try {
-                val networkRecipe = service.getRecipeById(recipeId)
+                val networkRecipe = recipeApiService.getRecipeById(recipeId)
                 val isFavorite = recipesDao.isFavorite(recipeId)
                 val combinedRecipe = networkRecipe.copy(isFavorite = isFavorite)
                 recipesDao.insert(combinedRecipe)
