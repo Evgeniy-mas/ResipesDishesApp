@@ -15,11 +15,12 @@ import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
+import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
 class RecipeModule() {
-
+    @Singleton
     @Provides
     fun provideDataBase(@ApplicationContext context: Context): AppDatabase {
         return AppDatabase.getDatabase(context)
@@ -38,6 +39,7 @@ class RecipeModule() {
             .build()
     }
 
+    @Singleton
     @Provides
     fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit {
         val contentType = "application/json".toMediaType()
@@ -49,6 +51,7 @@ class RecipeModule() {
         return retrofit
     }
 
+    @Singleton
     @Provides
     fun provideRecipeApiService(retrofit: Retrofit): RecipeApiService {
         return retrofit.create(RecipeApiService::class.java)
