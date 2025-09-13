@@ -1,7 +1,5 @@
 package com.example.resipesdishesapp.ui.recipe.favorites
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -9,10 +7,14 @@ import androidx.lifecycle.viewModelScope
 import com.example.resipesdishesapp.R
 import com.example.resipesdishesapp.data.RecipesRepository
 import com.example.resipesdishesapp.model.Recipe
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class FavoritesViewModel(  private val recipesRepository: RecipesRepository) : ViewModel() {
-
+@HiltViewModel
+class FavoritesViewModel @Inject constructor(
+    private val recipesRepository: RecipesRepository
+) : ViewModel() {
     private val _favoritesState = MutableLiveData(FavoritesState())
     val favoritesState: LiveData<FavoritesState> get() = _favoritesState
 

@@ -5,6 +5,8 @@ plugins {
     id("androidx.navigation.safeargs.kotlin")
     kotlin("plugin.serialization") version "2.1.0"
     id("com.google.devtools.ksp") version "2.1.0-1.0.29"
+    id("com.google.dagger.hilt.android")
+
 
 }
 
@@ -47,10 +49,11 @@ android {
 dependencies {
 
 
+    implementation(libs.hilt.android)
+    ksp(libs.hilt.android.compiler)
+
     implementation(libs.androidx.room.runtime)
-
     ksp(libs.androidx.room.compiler)
-
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.kotlinx.coroutines.core)
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
@@ -75,12 +78,11 @@ dependencies {
     implementation(libs.androidx.navigation.compose)
     implementation(libs.retrofit.v290)
     implementation(libs.retrofit2.kotlinx.serialization.converter)
-   
+
 
     val fragment_version = "1.8.4"
 
     // Java language implementation
     implementation(libs.androidx.fragment)
     // Kotlin
-    implementation(libs.androidx.fragment.ktx)
-}
+    implementation(libs.androidx.fragment.ktx)}

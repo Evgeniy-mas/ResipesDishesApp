@@ -8,19 +8,21 @@ import android.view.ViewGroup
 import android.widget.SeekBar
 import android.widget.Toast
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.resipesdishesapp.R
-import com.example.resipesdishesapp.RecipesApplication
 import com.example.resipesdishesapp.databinding.FragmentRecipeBinding
 import com.google.android.material.divider.MaterialDividerItemDecoration
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class RecipeFragment : Fragment() {
 
-    lateinit var viewModel: RecipeViewModel
+    val viewModel: RecipeViewModel by viewModels()
 
     private var _recipeBinding: FragmentRecipeBinding? = null
     private val recipeBinding: FragmentRecipeBinding
@@ -31,13 +33,6 @@ class RecipeFragment : Fragment() {
     private lateinit var methodAdapter: MethodAdapter
 
     private val args: RecipeFragmentArgs by navArgs()
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        val appContainer = (requireActivity().application as RecipesApplication).appContainer
-        viewModel = appContainer.recipeViewModelFactory.create()
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -133,7 +128,6 @@ class RecipeFragment : Fragment() {
         recyclerView.addItemDecoration(divider)
     }
 }
-
 class PortionSeekBarListener(val onChangeIngredients: (Int) -> Unit) :
     SeekBar.OnSeekBarChangeListener {
     override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {

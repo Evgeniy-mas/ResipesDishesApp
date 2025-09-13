@@ -1,22 +1,21 @@
 package com.example.resipesdishesapp.data
 
-
-
 import com.example.resipesdishesapp.R
 import com.example.resipesdishesapp.model.Category
 import com.example.resipesdishesapp.model.Recipe
 import com.example.resipesdishesapp.ui.category.CategoriesDao
 import com.example.resipesdishesapp.ui.recipe.listRecipes.RecipesDao
-import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
+import kotlin.coroutines.CoroutineContext
 
-class RecipesRepository(
+class RecipesRepository @Inject constructor(
     private val recipesDao: RecipesDao,
     private val categoriesDao: CategoriesDao,
     private val recipeApiService: RecipeApiService,
-    private val ioDispatcher: CoroutineDispatcher
-) {
+    ) {
+    private val ioDispatcher: CoroutineContext = Dispatchers.IO
     suspend fun getCategories(): NetworkResult<List<Category>> {
         return withContext(ioDispatcher) {
             try {
